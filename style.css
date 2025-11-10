@@ -1,0 +1,1724 @@
+/* =========================================================
+ 🎮 DevOpsQuest - Complete Futuristic Game Theme
+    Includes: Login Page + Character Selection Page
+========================================================= */
+
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* =========================================================
+ 🌌 1️⃣ PORTAL LOGIN PAGE STYLES
+========================================================= */
+
+.portal-body {
+  height: 100vh;
+  overflow: hidden;
+  font-family: 'Orbitron', sans-serif;
+  color: white;
+  background:
+    linear-gradient(rgba(2, 5, 20, 0.85), rgba(0, 0, 0, 0.9)),
+    url('assets/futuristic_bg.jpg') center/cover no-repeat fixed;
+  position: relative;
+}
+
+/* Glowing rings behind everything */
+.rings::before, .rings::after {
+  content: "";
+  position: absolute;
+  top: 50%; left: 50%;
+  width: 600px; height: 600px;
+  border: 4px solid rgba(20, 242, 255, 0.3);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  animation: rotateRings 10s linear infinite;
+  z-index: 0;
+}
+.rings::after {
+  width: 800px; height: 800px;
+  border-color: rgba(250, 204, 21, 0.25);
+  animation-direction: reverse;
+}
+
+/* Energy pulse glow */
+.energy-pulse {
+  position: absolute;
+  top: 50%; left: 50%;
+  width: 200px; height: 200px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(20,242,255,0.4), transparent 70%);
+  filter: blur(60px);
+  transform: translate(-50%, -50%);
+  animation: pulse 3s infinite ease-in-out;
+}
+
+@keyframes rotateRings {
+  from { transform: translate(-50%, -50%) rotate(0deg); }
+  to { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+@keyframes pulse {
+  0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.6; }
+  50% { transform: translate(-50%, -50%) scale(1.3); opacity: 0.9; }
+}
+
+/* Container for Login */
+.portal-container {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  top: 15%;
+  max-width: 380px;
+  margin: auto;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 40px 30px;
+  box-shadow: 0 0 60px rgba(20, 242, 255, 0.2);
+  backdrop-filter: blur(12px);
+  animation: fadeInUp 1.5s ease;
+}
+
+.portal-logo {
+  width: 120px;
+  filter: drop-shadow(0 0 25px #14f2ff);
+  animation: float 4s ease-in-out infinite;
+}
+
+.portal-title {
+  margin-top: 15px;
+  font-size: 1.3rem;
+  color: #14f2ff;
+  text-shadow: 0 0 20px rgba(20, 242, 255, 0.7);
+}
+
+.portal-subtitle {
+  color: #b3c5ff;
+  font-size: 0.9rem;
+  margin-bottom: 20px;
+}
+
+/* Inputs and Buttons */
+.portal-form input {
+  width: 100%;
+  padding: 12px;
+  margin: 8px 0;
+  border: none;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  text-align: center;
+  font-size: 1rem;
+}
+
+.btn-enter {
+  width: 100%;
+  background: linear-gradient(90deg, #14f2ff, #1e90ff);
+  border: none;
+  padding: 12px;
+  border-radius: 10px;
+  margin-top: 10px;
+  color: #000;
+  font-weight: bold;
+  font-size: 1rem;
+  cursor: pointer;
+  box-shadow: 0 0 15px rgba(20, 242, 255, 0.6);
+  transition: 0.3s;
+}
+.btn-enter:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 30px rgba(20, 242, 255, 0.8);
+}
+
+.divider {
+  margin: 20px 0;
+  font-size: 0.8rem;
+  color: #999;
+}
+
+.portal-social {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.social {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  color: white;
+  padding: 10px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: 0.3s;
+}
+.social img { width: 20px; height: 20px; }
+.social:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: scale(1.05);
+}
+
+.signup-link {
+  margin-top: 15px;
+  font-size: 0.8rem;
+  color: #b3c5ff;
+}
+.signup-link a { color: #14f2ff; text-decoration: none; }
+.signup-link a:hover { text-decoration: underline; }
+
+/* Animations */
+@keyframes float {
+  0%,100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(40px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* =========================================================
+ ⚔️ 2️⃣ CHARACTER SELECTION PAGE
+========================================================= */
+
+.character-body {
+  margin: 0;
+  font-family: 'Orbitron', sans-serif;
+  color: white;
+  height: 100vh;
+  overflow: hidden;
+  position: relative;
+  background:
+    linear-gradient(rgba(0, 0, 20, 0.8), rgba(0, 0, 0, 0.9)),
+    url('assets/futuristic_bg.jpg') center/cover no-repeat fixed;
+}
+
+/* glowing pulse in center */
+.energy-pulse {
+  position: absolute;
+  top: 50%; left: 50%;
+  width: 250px; height: 250px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(20,242,255,0.3), transparent 70%);
+  filter: blur(80px);
+  transform: translate(-50%, -50%);
+  animation: pulse 3s infinite ease-in-out;
+}
+
+/* header */
+.character-header {
+  text-align: center;
+  padding-top: 40px;
+  animation: fadeIn 1.5s ease;
+}
+.char-logo {
+  width: 120px;
+  filter: drop-shadow(0 0 20px #14f2ff);
+}
+.character-title {
+  font-size: 1.6rem;
+  color: #14f2ff;
+  margin: 10px 0 5px 0;
+  text-shadow: 0 0 15px #14f2ff;
+}
+.character-subtitle {
+  color: #b3c5ff;
+  font-size: 0.9rem;
+}
+
+/* character grid */
+.character-grid {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  margin-top: 60px;
+  flex-wrap: wrap;
+}
+
+.char-card {
+  width: 260px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 20px;
+  text-align: center;
+  padding: 15px;
+  box-shadow: 0 0 25px rgba(0,0,0,0.5);
+  transition: transform 0.4s, box-shadow 0.4s, border-color 0.4s;
+  cursor: pointer;
+  animation: fadeInUp 1.2s ease;
+}
+.char-card img {
+  width: 100%;
+  border-radius: 12px;
+  box-shadow: 0 0 20px rgba(20,242,255,0.1);
+}
+.char-card h2 {
+  margin: 10px 0 4px 0;
+  color: #14f2ff;
+}
+.char-card p {
+  font-size: 0.9rem;
+  color: #b3c5ff;
+}
+
+/* hover effect */
+.char-card:hover {
+  transform: translateY(-10px) scale(1.05);
+  border-color: #14f2ff;
+  box-shadow: 0 0 30px rgba(20,242,255,0.3);
+}
+
+/* selected hero (gold glow) */
+.char-card.selected {
+  border: 2px solid #facc15;
+  box-shadow: 0 0 40px rgba(250,204,21,0.5);
+  transform: scale(1.1);
+  animation: freezeFlash 1s ease, pulseSelected 2s infinite alternate;
+}
+
+@keyframes freezeFlash {
+  0% { filter: brightness(1); }
+  50% { filter: brightness(2.5); }
+  100% { filter: brightness(1); }
+}
+
+@keyframes pulseSelected {
+  from { box-shadow: 0 0 15px rgba(250,204,21,0.3); }
+  to { box-shadow: 0 0 40px rgba(250,204,21,0.8); }
+}
+
+/* button */
+.character-footer {
+  position: absolute;
+  bottom: 40px;
+  width: 100%;
+  text-align: center;
+}
+.btn-start {
+  padding: 14px 40px;
+  border-radius: 10px;
+  border: none;
+  background: linear-gradient(90deg, #14f2ff, #1e90ff);
+  color: black;
+  font-weight: bold;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: 0.3s;
+  opacity: 0.5;
+}
+.btn-start:hover {
+  transform: scale(1.05);
+}
+.btn-start.active {
+  opacity: 1;
+  box-shadow: 0 0 30px rgba(20,242,255,0.7);
+}
+
+/* Freeze effect when character selected */
+.frozen {
+  animation-play-state: paused !important;
+  pointer-events: none;
+  filter: brightness(0.8);
+}
+
+/* General animations */
+@keyframes fadeIn { from {opacity: 0;} to {opacity: 1;} }
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+/* =========================================================
+ 🌍 WORLD MAP PAGE
+========================================================= */
+
+.world-body {
+  height: 100vh;
+  overflow: hidden;
+  color: white;
+  font-family: 'Orbitron', sans-serif;
+  background:
+    linear-gradient(rgba(0,0,20,0.9), rgba(0,0,0,0.95)),
+    url('assets/futuristic_bg.jpg') center/cover no-repeat fixed;
+  position: relative;
+}
+
+.world-overlay {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: radial-gradient(circle at 50% 50%, rgba(20,242,255,0.1), transparent 70%);
+  filter: blur(80px);
+  z-index: 0;
+}
+
+.world-header {
+  text-align: center;
+  padding-top: 20px;
+  z-index: 2;
+  position: relative;
+}
+.world-logo {
+  width: 100px;
+  filter: drop-shadow(0 0 15px cyan);
+}
+.world-title {
+  font-size: 1.5rem;
+  color: #14f2ff;
+  text-shadow: 0 0 20px #14f2ff;
+}
+.world-subtitle {
+  font-size: 0.9rem;
+  color: #b3c5ff;
+}
+.back-btn {
+  position: absolute;
+  right: 40px;
+  top: 30px;
+  background: rgba(255,255,255,0.1);
+  border: none;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+.back-btn:hover {
+  background: rgba(255,255,255,0.2);
+  transform: scale(1.1);
+}
+
+/* Hero Info */
+.hero-section {
+  position: absolute;
+  bottom: 20px;
+  left: 30px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  z-index: 5;
+}
+.hero-img {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  border: 3px solid #14f2ff;
+  box-shadow: 0 0 25px #14f2ff;
+}
+.hero-info h2 {
+  color: #facc15;
+  font-size: 1rem;
+}
+
+/* Map */
+.world-map {
+  position: relative;
+  height: 100vh;
+  overflow: hidden;
+}
+.map-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: brightness(0.5);
+  animation: slowZoom 35s infinite alternate ease-in-out;
+}
+@keyframes slowZoom {
+  from { transform: scale(1); }
+  to { transform: scale(1.05); }
+}
+
+/* Quest icons */
+.quest {
+  position: absolute;
+  cursor: pointer;
+  transition: transform 0.3s ease, filter 0.3s ease;
+  z-index: 3;
+}
+.quest img {
+  width: 80px;
+  filter: drop-shadow(0 0 12px rgba(20, 242, 255, 0.8));
+}
+.quest:hover {
+  transform: scale(1.2);
+  filter: brightness(1.3);
+}
+
+/* Modal */
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.85);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10;
+}
+.modal-content {
+  background: rgba(10,20,40,0.9);
+  padding: 25px;
+  border-radius: 15px;
+  border: 1px solid rgba(255,255,255,0.2);
+  width: 320px;
+  text-align: center;
+  animation: fadeIn 0.5s ease;
+}
+.primary {
+  background: linear-gradient(90deg, #14f2ff, #1e90ff);
+  border: none;
+  padding: 10px 20px;
+  border-radius: 10px;
+  color: black;
+  font-weight: bold;
+  margin: 10px 5px;
+  cursor: pointer;
+}
+.secondary {
+  background: transparent;
+  border: 1px solid #fff;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+/* =========================================================
+ ⚙️ MISSION PAGE
+========================================================= */
+
+.mission-body {
+  background:
+    linear-gradient(rgba(0,0,30,0.95), rgba(0,0,0,0.95)),
+    url('assets/futuristic_bg.jpg') center/cover no-repeat fixed;
+  color: white;
+  font-family: 'Orbitron', sans-serif;
+  height: 100vh;
+  overflow: hidden;
+  position: relative;
+}
+
+.mission-overlay {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: radial-gradient(circle at 50% 50%, rgba(20,242,255,0.1), transparent 70%);
+  filter: blur(100px);
+}
+
+.mission-header {
+  text-align: center;
+  padding: 20px 0;
+  z-index: 3;
+}
+.mission-logo {
+  width: 90px;
+  filter: drop-shadow(0 0 10px cyan);
+}
+.xp-bar {
+  width: 70%;
+  height: 10px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 10px;
+  margin: 10px auto;
+  overflow: hidden;
+}
+.xp-fill {
+  width: 0%;
+  height: 100%;
+  background: linear-gradient(90deg, #14f2ff, #1e90ff);
+  transition: width 0.5s ease;
+}
+.xp-text {
+  font-size: 0.8rem;
+  color: #b3c5ff;
+}
+
+/* Terminal */
+.terminal {
+  background: rgba(0,0,0,0.7);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 10px;
+  width: 70%;
+  height: 45vh;
+  margin: 30px auto;
+  padding: 20px;
+  overflow-y: auto;
+  box-shadow: 0 0 30px rgba(20,242,255,0.2);
+}
+.terminal p {
+  font-family: monospace;
+  color: #14f2ff;
+  margin: 4px 0;
+}
+.terminal-input {
+  display: flex;
+  align-items: center;
+  margin-top: 10px;
+}
+.terminal-input label {
+  color: #facc15;
+  margin-right: 10px;
+}
+.terminal-input input {
+  width: 100%;
+  background: rgba(255,255,255,0.1);
+  border: none;
+  color: white;
+  font-family: monospace;
+  padding: 8px;
+  border-radius: 6px;
+  outline: none;
+}
+
+/* Buttons */
+.mission-footer {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+.primary, .secondary, .back-btn {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.9rem;
+  padding: 10px 20px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  transition: 0.3s;
+}
+.primary {
+  background: linear-gradient(90deg, #14f2ff, #1e90ff);
+  color: black;
+  font-weight: bold;
+}
+.secondary {
+  background: transparent;
+  border: 1px solid #fff;
+  color: white;
+}
+.back-btn {
+  background: rgba(255,255,255,0.1);
+  color: white;
+}
+.back-btn:hover {
+  background: rgba(255,255,255,0.2);
+}
+/* =========================================================
+ 🌍 WORLD MAP POLISH & EFFECTS
+========================================================= */
+
+/* =========================================================
+ 🌍 FUTURISTIC WORLD MAP DESIGN
+========================================================= */
+
+.world-body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Orbitron', sans-serif;
+  color: #fff;
+  background: radial-gradient(circle at 50% 20%, #0b0f2e 0%, #01010a 80%);
+  overflow: hidden;
+  position: relative;
+  min-height: 100vh;
+}
+
+/* HEADER */
+.world-header {
+  text-align: center;
+  margin-top: 20px;
+}
+.world-logo {
+  width: 90px;
+  filter: drop-shadow(0 0 10px cyan);
+}
+.world-title {
+  color: #14f2ff;
+  text-shadow: 0 0 20px cyan;
+  margin: 5px 0;
+  font-size: 1.8rem;
+}
+.world-subtitle {
+  color: #a8cfff;
+  font-size: 0.9rem;
+  margin-bottom: 15px;
+}
+
+/* MAP AREA */
+.world-map {
+  position: relative;
+  width: 90%;
+  max-width: 1200px;
+  margin: 0 auto;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 0 30px rgba(0,255,255,0.2);
+}
+.map-bg {
+  width: 100%;
+  height: auto;
+  opacity: 0.9;
+  border-radius: 20px;
+}
+
+/* QUEST ICONS (fixed positions) */
+.quest {
+  position: absolute;
+  width: 110px;
+  height: 110px;
+  background-size: cover;
+  background-position: center;
+  border-radius: 12px;
+  box-shadow: 0 0 20px rgba(0,255,255,0.4);
+  cursor: pointer;
+  transition: 0.3s ease;
+  filter: brightness(0.8);
+}
+.quest:hover {
+  transform: scale(1.15);
+  filter: brightness(1.2);
+  box-shadow: 0 0 40px rgba(0,255,255,0.8);
+}
+
+/* Position quests around the map image */
+.quest1 { top: 55%; left: 20%; }
+.quest2 { top: 50%; left: 48%; }
+.quest3 { top: 55%; left: 75%; }
+
+/* FOOTER HUD */
+.world-footer {
+  position: fixed;
+  bottom: 15px;
+  left: 20px;
+  font-size: 0.9rem;
+  color: #b3cfff;
+}
+.xp-display {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(0,255,255,0.05);
+  padding: 8px 14px;
+  border-radius: 10px;
+  border: 1px solid rgba(0,255,255,0.2);
+  box-shadow: 0 0 10px rgba(0,255,255,0.3);
+}
+
+/* BACK BUTTON */
+.back-btn {
+  position: fixed;
+  top: 15px;
+  right: 20px;
+  background: linear-gradient(90deg, #00bfff, #14f2ff);
+  border: none;
+  color: #000;
+  font-weight: bold;
+  border-radius: 10px;
+  padding: 8px 16px;
+  cursor: pointer;
+  font-family: 'Orbitron', sans-serif;
+  transition: all 0.3s ease;
+}
+.back-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 20px cyan;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .quest { width: 90px; height: 90px; }
+  .quest1 { top: 65%; left: 15%; }
+  .quest2 { top: 60%; left: 45%; }
+  .quest3 { top: 65%; left: 70%; }
+}
+/* =========================================================
+ 🌌 FUTURISTIC WORLD MAP (CLEAN + ALIGNED)
+========================================================= */
+/* =========================================================
+ 🌍 FUTURISTIC WORLD MAP DESIGN
+========================================================= */
+
+.world-body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Orbitron', sans-serif;
+  color: #fff;
+  background: radial-gradient(circle at 50% 20%, #0b0f2e 0%, #01010a 80%);
+  overflow: hidden;
+  position: relative;
+  min-height: 100vh;
+}
+
+/* HEADER */
+.world-header {
+  text-align: center;
+  margin-top: 20px;
+}
+.world-logo {
+  width: 90px;
+  filter: drop-shadow(0 0 10px cyan);
+}
+.world-title {
+  color: #14f2ff;
+  text-shadow: 0 0 20px cyan;
+  margin: 5px 0;
+  font-size: 1.8rem;
+}
+.world-subtitle {
+  color: #a8cfff;
+  font-size: 0.9rem;
+  margin-bottom: 15px;
+}
+
+/* MAP AREA */
+.world-map {
+  position: relative;
+  width: 90%;
+  max-width: 1200px;
+  margin: 0 auto;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 0 30px rgba(0,255,255,0.2);
+}
+.map-bg {
+  width: 100%;
+  height: auto;
+  opacity: 0.9;
+  border-radius: 20px;
+}
+
+/* QUEST ICONS (fixed positions) */
+.quest {
+  position: absolute;
+  width: 130px;
+  height: 120px;
+  background-size: cover;
+  background-position: center;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0,255,255,0.4);
+  cursor: pointer;
+  transition: 0.3s ease;
+  filter: brightness(0.8);
+}
+.quest:hover {
+  transform: scale(1.15);
+  filter: brightness(1.2);
+  box-shadow: 0 0 40px rgba(0,255,255,0.8);
+}
+
+/* Position quests around the map image */
+.quest1 { top: 55%; left: 20%; }
+.quest2 { top: 50%; left: 48%; }
+.quest3 { top: 55%; left: 75%; }
+
+/* FOOTER HUD */
+.world-footer {
+  position: fixed;
+  bottom: 15px;
+  left: 20px;
+  font-size: 0.9rem;
+  color: #b3cfff;
+}
+.xp-display {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(0,255,255,0.05);
+  padding: 8px 14px;
+  border-radius: 10px;
+  border: 1px solid rgba(0,255,255,0.2);
+  box-shadow: 0 0 10px rgba(0,255,255,0.3);
+}
+
+/* BACK BUTTON */
+.back-btn {
+  position: fixed;
+  top: 15px;
+  right: 20px;
+  background: linear-gradient(90deg, #00bfff, #14f2ff);
+  border: none;
+  color: #000;
+  font-weight: bold;
+  border-radius: 10px;
+  padding: 8px 16px;
+  cursor: pointer;
+  font-family: 'Orbitron', sans-serif;
+  transition: all 0.3s ease;
+}
+.back-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 20px cyan;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .quest { width: 90px; height: 90px; }
+  .quest1 { top: 65%; left: 15%; }
+  .quest2 { top: 60%; left: 45%; }
+  .quest3 { top: 65%; left: 70%; }
+}
+.daily-quest-card {
+  position: absolute;
+  bottom: 80px;
+  right: 30px;
+  width: 240px;
+  background: rgba(0, 10, 20, 0.85);
+  border: 1px solid cyan;
+  border-radius: 15px;
+  padding: 15px;
+  box-shadow: 0 0 20px rgba(0,255,255,0.2);
+  color: white;
+  font-family: 'Orbitron', sans-serif;
+  text-align: center;
+  animation: floaty 3s ease-in-out infinite;
+}
+
+.daily-quest-card h3 {
+  font-size: 1.1rem;
+  margin-bottom: 5px;
+}
+
+.daily-quest-card p {
+  font-size: 0.9rem;
+  opacity: 0.9;
+}
+
+@keyframes floaty {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+/* daily card */
+.daily-quest-card {
+  position: absolute;
+  right: 20px;
+  bottom: 80px;
+  background: rgba(0,20,40,0.8);
+  border: 1px solid rgba(20,242,255,0.2);
+  padding: 12px;
+  border-radius: 12px;
+  width: 220px;
+  box-shadow: 0 0 20px rgba(0,255,255,0.08);
+  z-index: 30;
+}
+
+/* leaderboard small button */
+.leader-btn { position: fixed; left: 20px; bottom: 20px; z-index:40; }
+.terminal {
+  background: #000814;
+  border: 2px solid cyan;
+  border-radius: 10px;
+  padding: 20px;
+  width: 80%;
+  margin: 30px auto;
+  color: #00ffff;
+  font-family: 'Source Code Pro', monospace;
+  box-shadow: 0 0 20px rgba(0,255,255,0.2);
+}
+
+.terminal-output {
+  height: 300px;
+  overflow-y: auto;
+  margin-bottom: 10px;
+  color: #00ffaa;
+}
+
+.terminal-input {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.terminal-input label {
+  color: cyan;
+}
+
+.terminal-input input {
+  flex: 1;
+  background: black;
+  color: #00ffcc;
+  border: none;
+  outline: none;
+  font-family: 'Source Code Pro', monospace;
+  padding: 5px;
+}
+
+.xp-bar {
+  height: 10px;
+  width: 200px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 5px;
+  overflow: hidden;
+  margin: 5px 0;
+}
+.xp-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, cyan, lime);
+  transition: width 0.5s;
+}
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.7);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+}
+
+.modal-content {
+  background: #001020;
+  border: 2px solid cyan;
+  border-radius: 15px;
+  padding: 25px;
+  text-align: center;
+  color: cyan;
+  width: 400px;
+  box-shadow: 0 0 25px rgba(0,255,255,0.3);
+}
+
+.modal-buttons {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 15px;
+}
+
+button.primary, button.secondary {
+  cursor: pointer;
+  padding: 8px 16px;
+  border-radius: 8px;
+  border: none;
+  font-size: 1rem;
+}
+
+button.primary {
+  background: linear-gradient(90deg, cyan, lime);
+  color: black;
+  font-weight: bold;
+}
+
+button.secondary {
+  background: transparent;
+  color: cyan;
+  border: 1px solid cyan;
+}
+
+button.primary:hover, button.secondary:hover {
+  transform: scale(1.05);
+  transition: 0.2s ease-in-out;
+}
+/* XP Progress Bar */
+.xp-section {
+  width: 250px;
+  margin: 10px auto;
+  text-align: center;
+  color: cyan;
+  font-family: 'Orbitron', sans-serif;
+}
+
+.xp-bar {
+  background: rgba(0, 255, 255, 0.2);
+  border: 1px solid cyan;
+  height: 10px;
+  width: 100%;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.xp-fill {
+  background: linear-gradient(90deg, cyan, lime);
+  height: 100%;
+  width: 0%;
+  transition: width 0.5s ease-in-out;
+}
+
+/* Level-Up Popup */
+.levelup-popup {
+  position: fixed;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: linear-gradient(45deg, #00ffff, #00ff90);
+  color: black;
+  padding: 20px 40px;
+  border-radius: 20px;
+  font-size: 1.5rem;
+  font-weight: bold;
+  box-shadow: 0 0 30px rgba(0, 255, 255, 0.5);
+  animation: pulse 1.5s infinite alternate;
+  z-index: 9999;
+}
+
+@keyframes pulse {
+  from { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+  to { transform: translate(-50%, -50%) scale(1.1); opacity: 0.8; }
+}
+/* LEARN PAGE STYLING */
+.learn-body {
+  background: radial-gradient(circle at top, #000428, #004e92);
+  color: white;
+  text-align: center;
+  font-family: 'Orbitron', sans-serif;
+  min-height: 100vh;
+  padding: 20px;
+}
+
+.learn-header {
+  margin-bottom: 30px;
+}
+
+.learn-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 25px;
+}
+
+.topic-section {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 25px;
+  border-radius: 20px;
+  width: 70%;
+  box-shadow: 0 0 25px rgba(0, 255, 255, 0.4);
+}
+
+.learn-img {
+  width: 180px;
+  height: auto;
+  border-radius: 12px;
+  margin-top: 10px;
+}
+.terminal-output {
+  background: rgba(0, 0, 0, 0.7);
+  color: #00ffcc;
+  font-family: 'Courier New', monospace;
+  height: 350px;
+  overflow-y: auto;
+  padding: 20px;
+  border: 1px solid #00ffff;
+  border-radius: 10px;
+  margin: 20px;
+}
+
+.terminal-input {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-family: 'Courier New', monospace;
+}
+
+.terminal-input label {
+  color: #00ffff;
+}
+
+#userInput {
+  width: 60%;
+  padding: 10px;
+  border: 2px solid #00ffff;
+  border-radius: 5px;
+  background: black;
+  color: #00ffcc;
+}
+/* LEADERBOARD PAGE STYLING */
+.leaderboard-body {
+  background: linear-gradient(135deg, #001f3f, #003366);
+  color: white;
+  font-family: 'Orbitron', sans-serif;
+  text-align: center;
+  min-height: 100vh;
+  padding: 30px;
+}
+
+.profile-card {
+  background: rgba(255, 255, 255, 0.1);
+  width: 350px;
+  margin: 20px auto;
+  border-radius: 20px;
+  padding: 20px;
+  box-shadow: 0 0 25px rgba(0, 255, 255, 0.4);
+}
+
+.profile-avatar {
+  width: 100px;
+  border-radius: 50%;
+}
+
+.achievement {
+  color: #00ffff;
+}
+
+.leaderboard-section {
+  margin-top: 30px;
+}
+
+table {
+  width: 80%;
+  margin: 0 auto;
+  border-collapse: collapse;
+  background: rgba(255, 255, 255, 0.05);
+  box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+th, td {
+  padding: 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+th {
+  background: rgba(0, 255, 255, 0.2);
+}
+
+tr.highlight-row {
+  background: rgba(0, 255, 255, 0.3);
+  font-weight: bold;
+}
+.hero-info {
+  text-align: left;
+  color: #ffcc00;
+  font-family: 'Orbitron', sans-serif;
+  text-shadow: 0 0 5px #00ffff;
+}
+
+.hero-img {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  box-shadow: 0 0 25px #00ffff;
+  border: 3px solid #00ffff;
+}
+
+.xp-glow {
+  animation: glow 0.8s ease-in-out;
+}
+
+@keyframes glow {
+  0% { color: #fff; text-shadow: 0 0 10px #00ffff; }
+  50% { color: #00ffff; text-shadow: 0 0 25px #00ffff; }
+  100% { color: #ffcc00; text-shadow: 0 0 10px #00ffff; }
+}
+/* 🏆 Leaderboard Button */
+.leaderboard-btn {
+  position: absolute;
+  top: 20px;
+  right: 80px;
+  background: linear-gradient(135deg, #00f0ff, #007bff);
+  color: white;
+  border: none;
+  padding: 10px 18px;
+  font-size: 16px;
+  border-radius: 10px;
+  cursor: pointer;
+  box-shadow: 0 0 10px rgba(0, 255, 255, 0.4);
+  transition: all 0.3s ease;
+}
+
+.leaderboard-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 25px rgba(0, 255, 255, 0.8);
+}
+/* 🌍 Leaderboard Page */
+.leaderboard-body {
+  background: radial-gradient(circle at center, #00111a 0%, #000000 100%);
+  color: #fff;
+  font-family: "Poppins", sans-serif;
+  text-align: center;
+  min-height: 100vh;
+  padding: 20px;
+  overflow-x: hidden;
+}
+
+.leaderboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.leaderboard-header h1 {
+  font-size: 2.2rem;
+  color: #00f0ff;
+  text-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
+}
+
+.leaderboard-container {
+  display: flex;
+  justify-content: center;
+}
+
+.leaderboard-table {
+  border-collapse: collapse;
+  width: 80%;
+  max-width: 800px;
+  background: rgba(0, 30, 50, 0.8);
+  border-radius: 15px;
+  box-shadow: 0 0 30px rgba(0, 255, 255, 0.2);
+}
+
+.leaderboard-table th, .leaderboard-table td {
+  padding: 15px 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.leaderboard-table th {
+  color: #00f0ff;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.leaderboard-table tr:hover {
+  background: rgba(0, 255, 255, 0.1);
+  transition: 0.3s ease;
+}
+/* 🌟 Animated Leaderboard Effects */
+.leaderboard-container {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  animation: fadeIn 1s ease-in-out;
+}
+
+.leaderboard-glow {
+  position: absolute;
+  width: 90%;
+  height: 100%;
+  background: radial-gradient(circle, rgba(0,255,255,0.2) 0%, transparent 80%);
+  filter: blur(60px);
+  z-index: 0;
+}
+
+/* 🪄 Slide-in animation for rows */
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 🌟 General leaderboard table style */
+.leaderboard-table {
+  position: relative;
+  z-index: 10;
+  border-collapse: collapse;
+  width: 80%;
+  max-width: 850px;
+  background: rgba(0, 20, 30, 0.85);
+  border-radius: 15px;
+  box-shadow: 0 0 40px rgba(0, 255, 255, 0.25);
+  backdrop-filter: blur(6px);
+  overflow: hidden;
+  animation: fadeUp 0.8s ease-in-out;
+}
+
+.leaderboard-table th, .leaderboard-table td {
+  padding: 16px 12px;
+  font-size: 1rem;
+  text-align: center;
+  color: #fff;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+.leaderboard-table tr {
+  opacity: 0;
+  animation: slideIn 0.5s forwards ease;
+}
+
+/* 🥇🥈🥉 Highlight top ranks */
+.gold {
+  background: linear-gradient(90deg, #ffd70020, #fffacd10);
+  color: #ffe766;
+  text-shadow: 0 0 10px rgba(255,215,0,0.7);
+}
+
+.silver {
+  background: linear-gradient(90deg, #c0c0c020, #e0e0e010);
+  color: #c0c0c0;
+  text-shadow: 0 0 8px rgba(192,192,192,0.6);
+}
+
+.bronze {
+  background: linear-gradient(90deg, #cd7f3220, #deb88710);
+  color: #cd7f32;
+  text-shadow: 0 0 8px rgba(205,127,50,0.6);
+}
+
+/* Subtle hover */
+.leaderboard-table tr:hover {
+  background: rgba(0,255,255,0.1);
+  transition: background 0.3s ease;
+}
+
+/* Fade-in for whole section */
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+.hero-icon {
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  margin-right: 8px;
+  vertical-align: middle;
+  box-shadow: 0 0 10px rgba(0,255,255,0.4);
+}
+/* 🌟 Learning Zone Styles */
+.learn-body {
+  background: linear-gradient(135deg, #00121a 0%, #000000 100%);
+  color: white;
+  font-family: "Poppins", sans-serif;
+  text-align: center;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow: hidden;
+}
+
+.learn-header {
+  padding: 20px;
+}
+
+.learn-logo {
+  width: 120px;
+  filter: drop-shadow(0 0 10px cyan);
+}
+
+.lesson-subtitle {
+  font-size: 1.1rem;
+  color: #00ffff;
+  text-shadow: 0 0 10px rgba(0,255,255,0.4);
+}
+
+.learn-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.lesson-box {
+  background: rgba(0, 30, 50, 0.8);
+  padding: 30px;
+  border-radius: 15px;
+  width: 70%;
+  box-shadow: 0 0 30px rgba(0,255,255,0.2);
+  animation: fadeIn 1s ease;
+}
+
+.lesson-box h2 {
+  color: #00ffff;
+  text-shadow: 0 0 20px rgba(0,255,255,0.4);
+  margin-bottom: 15px;
+}
+
+.lesson-box p {
+  font-size: 1.1rem;
+  line-height: 1.6;
+}
+
+.learn-controls {
+  margin-top: 20px;
+}
+
+.primary, .secondary {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 10px;
+  margin: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 1rem;
+}
+
+.primary {
+  background: linear-gradient(135deg, #00ffff, #007bff);
+  color: black;
+}
+
+.secondary {
+  background: rgba(255,255,255,0.1);
+  color: white;
+}
+
+.primary:hover, .secondary:hover {
+  transform: scale(1.05);
+  transition: 0.2s ease;
+}
+
+.learn-footer {
+  padding: 15px;
+}
+
+/* ✨ Typewriter Effect */
+.typewriter {
+  border-right: 2px solid cyan;
+  white-space: nowrap;
+  overflow: hidden;
+  display: inline-block;
+  animation: typing 2.5s steps(50, end) 1s 1 normal both, blink 1s step-end infinite;
+}
+
+@keyframes typing {
+  from { width: 0; }
+  to { width: 100%; }
+}
+
+@keyframes blink {
+  50% { border-color: transparent; }
+}
+/* 😂 Meme Challenge Zone */
+.meme-body {
+  background: radial-gradient(circle, #000e15 0%, #001f2f 100%);
+  color: white;
+  font-family: "Poppins", sans-serif;
+  text-align: center;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.meme-header {
+  margin-top: 30px;
+}
+
+.meme-logo {
+  width: 120px;
+  filter: drop-shadow(0 0 10px cyan);
+}
+
+.meme-container {
+  margin-top: 30px;
+  width: 80%;
+  max-width: 700px;
+  background: rgba(0, 30, 50, 0.85);
+  border-radius: 15px;
+  padding: 20px;
+  box-shadow: 0 0 30px rgba(0,255,255,0.3);
+}
+
+.meme-img {
+  width: 100%;
+  max-height: 320px;
+  object-fit: contain;
+  border-radius: 12px;
+  margin-bottom: 15px;
+  border: 2px solid rgba(0,255,255,0.2);
+}
+
+.meme-options {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  margin-top: 10px;
+}
+
+.meme-option-btn {
+  background: rgba(0, 255, 255, 0.1);
+  color: white;
+  border: 1px solid rgba(0,255,255,0.2);
+  border-radius: 8px;
+  padding: 10px 15px;
+  width: 80%;
+  max-width: 400px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: 0.2s ease;
+}
+
+.meme-option-btn:hover {
+  background: rgba(0,255,255,0.3);
+  transform: scale(1.05);
+}
+
+.meme-feedback {
+  margin-top: 20px;
+  font-size: 1.1rem;
+  min-height: 24px;
+}
+
+.meme-controls {
+  margin-top: 25px;
+}
+
+.meme-feedback.correct {
+  color: #00ffcc;
+  text-shadow: 0 0 10px rgba(0,255,255,0.4);
+}
+
+.meme-feedback.wrong {
+  color: #ff4d4d;
+  text-shadow: 0 0 10px rgba(255,77,77,0.4);
+}
+/* 🧩 Puzzle Arena Styling */
+.puzzle-body {
+  background: radial-gradient(circle at top, #0b0c1a, #1b1d35);
+  color: #fff;
+  font-family: 'Poppins', sans-serif;
+  text-align: center;
+  min-height: 100vh;
+}
+
+.puzzle-header h1 {
+  font-size: 2.2rem;
+  color: #00ffd5;
+}
+
+.steps-container {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 2rem;
+  flex-wrap: wrap;
+}
+
+.steps-pool, .drop-zone {
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px dashed #00ffd5;
+  border-radius: 12px;
+  padding: 20px;
+  width: 40%;
+  min-height: 250px;
+}
+
+.draggable {
+  background: #1c2335;
+  color: #00ff90;
+  border: 1px solid #00ff90;
+  padding: 10px;
+  border-radius: 8px;
+  margin: 5px;
+  cursor: grab;
+  transition: transform 0.2s;
+}
+.draggable:active {
+  transform: scale(1.05);
+}
+
+.drop-zone {
+  border-color: #ffc400;
+  background: rgba(255, 200, 0, 0.1);
+}
+
+.bug-dialogue {
+  margin-top: 1rem;
+  font-style: italic;
+  color: #ffc400;
+}
+
+.puzzle-controls {
+  margin-top: 2rem;
+}
+
+.primary {
+  background: #00ff90;
+  color: #000;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+.secondary {
+  background: #1c2335;
+  color: #00ff90;
+  border: 1px solid #00ff90;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+.back-btn {
+  background: #ff006e;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+.learn-body {
+  background: radial-gradient(circle at center, #021024, #000);
+  color: #fff;
+  text-align: center;
+  font-family: 'Orbitron', sans-serif;
+  padding: 40px;
+}
+
+.lesson-box {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 20px;
+  border-radius: 15px;
+  margin: 20px auto;
+  width: 60%;
+  box-shadow: 0 0 15px cyan;
+}
+
+.primary, .secondary {
+  padding: 12px 25px;
+  margin: 15px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 1.1em;
+}
+
+.primary {
+  background: linear-gradient(90deg, #00c6ff, #0072ff);
+  color: #fff;
+  box-shadow: 0 0 10px #00c6ff;
+}
+
+.secondary {
+  background: rgba(255,255,255,0.2);
+  color: #ccc;
+}
+/* ===== HERO BADGE STRIP ===== */
+.hero-badges {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 8px;
+}
+
+.hero-badges .small-badge {
+  display: flex;
+  align-items: center;
+  background: rgba(255,255,255,0.05);
+  border-radius: 10px;
+  padding: 6px 8px;
+  box-shadow: 0 0 10px rgba(0,200,255,0.15);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.hero-badges .small-badge:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 15px rgba(0,255,255,0.25);
+}
+
+.small-badge img {
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  margin-right: 6px;
+}
+
+.small-badge span {
+  font-size: 0.9em;
+  color: #c6f6ff;
+  font-family: "Orbitron", sans-serif;
+}
