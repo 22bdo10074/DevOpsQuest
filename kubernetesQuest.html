@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>☸️ Kubernetes Quest — Learn & MCQ Challenge</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    body {
+      font-family: "Orbitron", "Rajdhani", sans-serif;
+      background: radial-gradient(circle at top, #010a1a, #000);
+      color: #d6faff;
+      text-align: center;
+      padding: 30px;
+      overflow-x: hidden;
+    }
+    h1 {
+      color: #00f7ff;
+      text-shadow: 0 0 15px #00f7ff;
+      font-size: 2em;
+    }
+    .panel {
+      background: rgba(0, 20, 40, 0.7);
+      border: 2px solid rgba(0, 255, 255, 0.2);
+      border-radius: 15px;
+      padding: 25px;
+      margin: 25px auto;
+      width: 85%;
+      max-width: 900px;
+      box-shadow: 0 0 25px rgba(0,255,255,0.15);
+      text-align: left;
+    }
+    ul {
+      line-height: 1.8;
+      color: #bafcff;
+    }
+    button {
+      margin-top: 20px;
+      padding: 12px 30px;
+      border: none;
+      border-radius: 10px;
+      background: linear-gradient(90deg, #00ffc8, #00f7ff);
+      color: #001821;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 0 20px rgba(0,255,255,0.3);
+      transition: 0.3s;
+    }
+    button:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 30px #00ffc8;
+    }
+    .diagram {
+      text-align: center;
+      margin: 20px auto;
+    }
+    .diagram img {
+      width: 80%;
+      max-width: 600px;
+      border-radius: 12px;
+      box-shadow: 0 0 25px rgba(0,255,255,0.15);
+    }
+    .mcq-section {
+      display: none;
+      text-align: center;
+    }
+    .question {
+      font-size: 1.2em;
+      margin-bottom: 20px;
+      color: #bff;
+    }
+    .option {
+      background: rgba(0,255,255,0.05);
+      border: 1px solid rgba(0,255,255,0.3);
+      padding: 10px;
+      border-radius: 10px;
+      width: 80%;
+      max-width: 500px;
+      margin: 8px auto;
+      cursor: pointer;
+      font-weight: bold;
+      color: #aef;
+      transition: 0.3s;
+    }
+    .option:hover { background: rgba(0,255,255,0.15); }
+    .correct { background: rgba(0,255,100,0.25); border-color: #00ff88; }
+    .wrong { background: rgba(255, 60, 60, 0.25); border-color: #ff7070; }
+    .feedback { margin-top: 15px; font-weight: bold; }
+    .popup {
+      position: fixed;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%) scale(0.8);
+      background: rgba(0, 20, 40, 0.95);
+      border: 2px solid #00ffc8;
+      border-radius: 15px;
+      padding: 30px 50px;
+      color: #d6faff;
+      text-align: center;
+      box-shadow: 0 0 25px #00ffc8;
+      animation: pop 0.5s forwards ease-in-out;
+      opacity: 0;
+    }
+    @keyframes pop { to { opacity: 1; transform: translate(-50%, -50%) scale(1); } }
+    .confetti {
+      position: fixed; width: 10px; height: 10px; top: 0;
+      animation: fall 2.5s linear forwards;
+    }
+    @keyframes fall {
+      0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+      100% { transform: translateY(600px) rotate(720deg); opacity: 0; }
+    }
+  </style>
+</head>
+<body>
+
+  <h1>☸️ Kubernetes Quest — Learn & Challenge</h1>
+
+  <!-- 📘 LEARNING PHASE -->
+  <div id="learnPanel" class="panel">
+    <h2>📘 Learn Kubernetes</h2>
+    <p>Kubernetes (or K8s) is an open-source container orchestration platform that automates the deployment, scaling, and management of containerized applications.</p>
+
+    <ul>
+      <li><b>Cluster:</b> A set of nodes (machines) that run containerized applications.</li>
+      <li><b>Master Node (Control Plane):</b> Manages the Kubernetes cluster. Components include:
+        <ul>
+          <li><b>API Server:</b> Handles communication between users and the cluster.</li>
+          <li><b>etcd:</b> A key-value store maintaining cluster state.</li>
+          <li><b>Scheduler:</b> Decides which node runs which pod.</li>
+          <li><b>Controller Manager:</b> Ensures the desired state of the cluster.</li>
+        </ul>
+      </li>
+      <li><b>Worker Node:</b> Runs application workloads using:
+        <ul>
+          <li><b>Kubelet:</b> Agent that runs containers and reports node health.</li>
+          <li><b>Kube Proxy:</b> Manages networking and routing.</li>
+          <li><b>Container Runtime:</b> Runs containers (Docker, containerd, etc.).</li>
+        </ul>
+      </li>
+      <li><b>Pod:</b> Smallest deployable unit in Kubernetes — one or more containers.</li>
+      <li><b>Deployment:</b> Manages updates and scaling of Pods.</li>
+      <li><b>Service:</b> Exposes Pods to the network.</li>
+      <li><b>ConfigMap & Secret:</b> Store configuration and sensitive data.</li>
+    </ul>
+
+    <div class="diagram">
+      <img src="https://utho.com/blog/wp-content/uploads/Kubernetes-Architecture-Diagram.jpg" alt="Kubernetes Architecture Diagram">
+    </div>
+
+    <center><button id="startMCQ">⚔️ Start MCQ Challenge</button></center>
+  </div>
+
+  <!-- 🧠 MCQ CHALLENGE -->
+  <div id="mcqPanel" class="panel mcq-section">
+    <h2>🧠 Kubernetes Quest — MCQ Challenge</h2>
+    <div class="question" id="question"></div>
+    <div id="options"></div>
+    <button id="nextBtn">Next ➡️</button>
+    <div class="feedback" id="feedback"></div>
+  </div>
+
+  <!-- 🎵 Audio -->
+  <audio id="bgMusic" src="assets/bgm.mp3" loop></audio>
+  <audio id="sfxSuccess" src="assets/sfx_success.mp3"></audio>
+  <audio id="sfxFail" src="assets/sfx_wrong.mp3"></audio>
+
+  <script>
+    const learnPanel = document.getElementById("learnPanel");
+    const mcqPanel = document.getElementById("mcqPanel");
+    const questionBox = document.getElementById("question");
+    const optionsBox = document.getElementById("options");
+    const nextBtn = document.getElementById("nextBtn");
+    const feedback = document.getElementById("feedback");
+    const bgMusic = document.getElementById("bgMusic");
+    const sfxSuccess = document.getElementById("sfxSuccess");
+    const sfxFail = document.getElementById("sfxFail");
+
+    // 🎵 Music Setup
+    bgMusic.volume = 0.3;
+    bgMusic.play().catch(() => {
+      document.body.addEventListener("click", () => bgMusic.play(), { once: true });
+    });
+
+    // 🧠 Questions
+    const questions = [
+      { q: "What is Kubernetes primarily used for?", opts: ["Managing virtual machines", "Orchestrating containers", "Hosting websites", "Monitoring servers"], ans: 1 },
+      { q: "Which component stores cluster data?", opts: ["Kubelet", "Scheduler", "etcd", "API Server"], ans: 2 },
+      { q: "The smallest deployable unit in Kubernetes is:", opts: ["Service", "Pod", "Node", "Deployment"], ans: 1 },
+      { q: "Which command lists all running Pods?", opts: ["kubectl pods list", "kubectl get pods", "kubectl ps", "kubectl show pods"], ans: 1 },
+      { q: "Which Kubernetes object exposes Pods to the network?", opts: ["ConfigMap", "Service", "Deployment", "Ingress"], ans: 1 },
+      { q: "What does the Kubelet do?", opts: ["Manages cluster control", "Runs containers and reports health", "Stores data", "Handles external API calls"], ans: 1 },
+      { q: "Which component ensures the desired cluster state?", opts: ["Scheduler", "Controller Manager", "Kube Proxy", "Container Runtime"], ans: 1 },
+      { q: "What does 'kubectl apply -f deployment.yaml' do?", opts: ["Deletes resources", "Applies configuration from file", "Lists deployments", "Runs a container"], ans: 1 },
+      { q: "Which part of Kubernetes handles scheduling of pods?", opts: ["Kube Proxy", "Kubelet", "Scheduler", "API Server"], ans: 2 },
+      { q: "What is the purpose of ConfigMap?", opts: ["Store configuration data", "Manage secrets", "Expose Pods", "Create images"], ans: 0 }
+    ];
+
+    let currentQ = 0, score = 0;
+
+    document.getElementById("startMCQ").addEventListener("click", () => {
+      learnPanel.style.display = "none";
+      mcqPanel.style.display = "block";
+      loadQuestion();
+    });
+
+    function loadQuestion() {
+      const q = questions[currentQ];
+      questionBox.textContent = `Q${currentQ + 1}: ${q.q}`;
+      optionsBox.innerHTML = "";
+      feedback.textContent = "";
+      q.opts.forEach((opt, i) => {
+        const div = document.createElement("div");
+        div.className = "option";
+        div.textContent = opt;
+        div.onclick = () => selectAnswer(i, div);
+        optionsBox.appendChild(div);
+      });
+      nextBtn.style.display = "none";
+    }
+
+    function selectAnswer(i, el) {
+      const q = questions[currentQ];
+      const allOptions = document.querySelectorAll(".option");
+      allOptions.forEach(opt => opt.classList.remove("correct", "wrong"));
+      if (i === q.ans) {
+        el.classList.add("correct");
+        feedback.textContent = "✅ Correct!";
+        feedback.style.color = "#00ffc8";
+        sfxSuccess.play();
+        score++;
+      } else {
+        el.classList.add("wrong");
+        allOptions[q.ans].classList.add("correct");
+        feedback.textContent = "❌ Wrong!";
+        feedback.style.color = "#ff7070";
+        sfxFail.play();
+      }
+      nextBtn.style.display = "inline-block";
+    }
+
+    nextBtn.onclick = () => {
+      currentQ++;
+      if (currentQ < questions.length) loadQuestion();
+      else completeQuest();
+    };
+
+    function completeQuest() {
+      bgMusic.pause();
+      document.body.innerHTML = `
+        <div class="popup">
+          <h2>🎉 Kubernetes Quest Completed!</h2>
+          <p>You scored ${score}/${questions.length}</p>
+          <p>✨ Level Up! You’ve mastered Containers Orchestration.</p>
+          
+          <button onclick="goToWorld()">🌍 Move to CLI Quest </button>
+        </div>`;
+      launchConfetti();
+
+      // XP Update + Unlock Jenkins
+      const unlocked = JSON.parse(localStorage.getItem("unlockedQuests") || "[]");
+      if (!unlocked.includes("Jenkins Quest")) unlocked.push("Jenkins Quest");
+      localStorage.setItem("unlockedQuests", JSON.stringify(unlocked));
+      localStorage.setItem("xp", parseInt(localStorage.getItem("xp") || 0) + 500);
+      localStorage.setItem("nextQuest", "jenkins");
+    }
+
+    function goToWorld() { window.location.href = "kubernetesCli.html"; }
+
+    function launchConfetti() {
+      for (let i = 0; i < 40; i++) {
+        const c = document.createElement("div");
+        c.classList.add("confetti");
+        c.style.left = Math.random() * window.innerWidth + "px";
+        c.style.background = ["#00f7ff","#00ffc8","#ff7b9b"][Math.floor(Math.random()*3)];
+        c.style.animationDuration = 1.5 + Math.random()*2 + "s";
+        document.body.appendChild(c);
+        setTimeout(() => c.remove(), 2500);
+      }
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,5 @@
+[
+  { "id": "git_master", "name": "Git Guru", "condition": "Git Quest completed" },
+  { "id": "docker_diver", "name": "Docker Diver", "condition": "Docker Quest completed" },
+  { "id": "k8s_captain", "name": "Kubernetes Captain", "condition": "K8s Quest completed" }
+]

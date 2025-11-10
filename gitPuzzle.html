@@ -1,0 +1,270 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Git Puzzle — DevOpsQuest</title>
+<style>
+  :root {
+    --bg:#030617; 
+    --accent:#00f7ff; 
+    --accent2:#00ffc8;
+  }
+  body {
+    margin:0;
+    font-family:"Orbitron",sans-serif;
+    background: radial-gradient(circle at 20% 20%, #021025 0%, #000 60%);
+    color:#bff;
+    text-align:center;
+    min-height:100vh;
+    padding:36px 12px;
+  }
+  h1 {
+    color:var(--accent);
+    text-shadow:0 0 16px var(--accent2);
+  }
+  .lead {
+    opacity:.8;
+    margin-bottom:25px;
+  }
+  .bank, .drop-frame {
+    display:flex;
+    justify-content:center;
+    flex-wrap:wrap;
+    gap:14px;
+    margin:15px auto;
+    max-width:1100px;
+  }
+  .cmd {
+    padding:12px 18px;
+    border-radius:10px;
+    background:rgba(0,255,255,0.06);
+    border:2px solid rgba(0,255,255,0.2);
+    cursor:grab;
+    font-weight:700;
+    color:#dff;
+    min-width:150px;
+    transition:transform 0.2s ease;
+  }
+  .cmd:hover { transform:scale(1.05); }
+  .drop-frame {
+    border:2px dashed rgba(0,255,255,0.15);
+    border-radius:10px;
+    min-height:120px;
+    width:85%;
+    padding:20px;
+  }
+  button {
+    padding:12px 20px;
+    border-radius:10px;
+    border:none;
+    font-weight:700;
+    cursor:pointer;
+    margin:6px;
+  }
+  .primary {
+    background:linear-gradient(90deg,var(--accent2),var(--accent));
+    color:#001821;
+  }
+  .ghost {
+    background:rgba(255,255,255,0.05);
+    color:#bff;
+  }
+  #message {
+    margin-top:18px;
+    font-weight:700;
+  }
+  .success { color:#7ef5b5; }
+  .error { color:#ff7a9a; }
+
+  /* Level up modal */
+  .popup {
+    position:fixed;
+    top:50%; left:50%;
+    transform:translate(-50%,-50%) scale(0.9);
+    background:rgba(0,20,40,0.95);
+    border:2px solid var(--accent2);
+    box-shadow:0 0 25px var(--accent2);
+    padding:35px 50px;
+    border-radius:15px;
+    color:#dff;
+    text-align:center;
+    opacity:0;
+    animation:show 0.5s forwards ease-in-out;
+    z-index:999;
+  }
+  @keyframes show { to { opacity:1; transform:translate(-50%,-50%) scale(1); } }
+  .next-btn {
+    margin-top:15px;
+    padding:10px 20px;
+    border:none;
+    border-radius:10px;
+    background:linear-gradient(90deg,var(--accent2),var(--accent));
+    color:#001821;
+    font-weight:700;
+    cursor:pointer;
+  }
+
+  /* confetti */
+  .confetti {
+    position:fixed;
+    width:10px;
+    height:10px;
+    top:0;
+    animation:fall 2.5s linear forwards;
+  }
+  @keyframes fall {
+    0% { transform:translateY(0) rotate(0deg); opacity:1; }
+    100% { transform:translateY(600px) rotate(720deg); opacity:0; }
+  }
+</style>
+</head>
+
+<body>
+  <h1>🧩 Git Puzzle Challenge</h1>
+  <div class="lead">Arrange the Git commands in the correct order.</div>
+
+  <div id="bank" class="bank"></div>
+  <div id="drop" class="drop-frame"><div>Drop your commands here</div></div>
+
+  <div>
+    <button id="checkBtn" class="primary">✅ Check Order</button>
+    <button id="tryBtn" class="ghost">🔁 Try Again</button>
+    <button id="resetBtn" class="ghost">♻ Reset Puzzle</button>
+  </div>
+
+  <div id="message"></div>
+
+  <!-- 🎵 Audio -->
+  <audio id="bgMusic" src="assets/bgm.mp3" loop></audio>
+  <audio id="sfxSuccess" src="assets/sfx_success.mp3"></audio>
+  <audio id="sfxFail" src="assets/sfx_wrong.mp3"></audio>
+
+<script>
+const puzzles = [
+  {commands:["git init","git add .","git commit -m 'message'","git push"],
+   answer:["git init","git add .","git commit -m 'message'","git push"]},
+  {commands:["git checkout -b feature","git add .","git push origin feature","git checkout main","git merge feature"],
+   answer:["git checkout -b feature","git add .","git push origin feature","git checkout main","git merge feature"]}
+];
+
+let current = 0;
+const bank=document.getElementById("bank"),
+      drop=document.getElementById("drop"),
+      check=document.getElementById("checkBtn"),
+      tryBtn=document.getElementById("tryBtn"),
+      reset=document.getElementById("resetBtn"),
+      msg=document.getElementById("message");
+
+const bgMusic=document.getElementById("bgMusic"),
+      sfxS=document.getElementById("sfxSuccess"),
+      sfxF=document.getElementById("sfxFail");
+
+// 🎵 Background Music
+bgMusic.volume = 0.3;
+bgMusic.play().catch(()=>{ 
+  console.log("Autoplay blocked. Music will play after user interaction.");
+  document.body.addEventListener("click",()=>bgMusic.play(),{once:true});
+});
+
+function shuffle(a){return a.sort(()=>Math.random()-0.5);}
+function makeCmd(t){
+  const e=document.createElement("div");
+  e.className="cmd";
+  e.draggable=!0;
+  e.textContent=t;
+  e.dataset.cmd=t;
+  e.ondragstart=ev=>ev.dataTransfer.setData("text/plain",t);
+  return e;
+}
+
+function renderPuzzle(){
+  msg.textContent="";
+  drop.innerHTML="<div>Drop your commands here</div>";
+  bank.innerHTML="";
+  shuffle([...puzzles[current].commands]).forEach(c=>bank.appendChild(makeCmd(c)));
+}
+
+drop.ondragover=e=>e.preventDefault();
+drop.ondrop=e=>{
+  e.preventDefault();
+  const t=e.dataTransfer.getData("text/plain");
+  if(!t)return;
+  const el=makeCmd(t);
+  el.onclick=()=>{el.remove();bank.appendChild(makeCmd(t));};
+  drop.appendChild(el);
+  const rem=[...bank.children].find(c=>c.dataset.cmd===t);
+  if(rem)rem.remove();
+};
+
+tryBtn.onclick=()=>{
+  [...drop.querySelectorAll(".cmd")].forEach(c=>{
+    bank.appendChild(makeCmd(c.dataset.cmd));
+    c.remove();
+  });
+  msg.textContent="🔁 Try again from start.";
+  msg.className="";
+};
+
+reset.onclick=()=>{
+  renderPuzzle();
+  msg.textContent="♻ Puzzle reset.";
+  msg.className="";
+};
+
+check.onclick=()=>{
+  const seq=[...drop.querySelectorAll(".cmd")].map(c=>c.dataset.cmd),
+        ans=puzzles[current].answer;
+  if(seq.length!==ans.length){
+    sfxF.play();
+    msg.textContent="⚠️ Drop all commands first.";
+    msg.className="error";
+    return;
+  }
+  const ok=seq.every((v,i)=>v===ans[i]);
+  if(ok){
+    sfxS.play();
+    msg.textContent="🎉 Correct!";
+    msg.className="success";
+    current++;
+    if(current>=puzzles.length){
+      setTimeout(showLevelUp,800);
+    } else setTimeout(renderPuzzle,1000);
+  }else{
+    sfxF.play();
+    msg.textContent="❌ Incorrect order.";
+    msg.className="error";
+  }
+};
+
+function showLevelUp(){
+  // 🎊 Confetti Animation
+  for(let i=0;i<40;i++){
+    const c=document.createElement("div");
+    c.className="confetti";
+    c.style.left=Math.random()*window.innerWidth+"px";
+    c.style.background=["#00ffc8","#00f7ff","#ff7b9b"][Math.floor(Math.random()*3)];
+    c.style.animationDuration=1.5+Math.random()*2+"s";
+    document.body.appendChild(c);
+    setTimeout(()=>c.remove(),2500);
+  }
+  // 🏆 Popup
+  const p=document.createElement("div");
+  p.className="popup";
+  p.innerHTML=`<h2>⚡ Level Up!</h2>
+               <p>You’ve mastered the Git Puzzles!</p>
+               <p>Next Quest → <strong>Git MCQ Challenge ⚔️</strong></p>
+               <button class="next-btn" onclick="toQuiz()">Proceed ➜</button>`;
+  document.body.appendChild(p);
+  setTimeout(()=>toQuiz(),5000);
+}
+
+function toQuiz(){
+  bgMusic.pause();
+  window.location.href="gitQuiz.html";
+}
+
+renderPuzzle();
+</script>
+</body>
+</html>

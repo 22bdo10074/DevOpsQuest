@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>⚔️ Git Quest — MCQ Challenge</title>
+  <style>
+    body {
+      font-family: "Orbitron", sans-serif;
+      background: radial-gradient(circle at 20% 20%, #010a1a, #000);
+      color: #d6faff;
+      text-align: center;
+      padding: 30px;
+      overflow-x: hidden;
+    }
+    h1 {
+      color: #00f7ff;
+      text-shadow: 0 0 15px #00f7ff;
+      font-size: 1.8em;
+    }
+    .container {
+      margin: 50px auto;
+      background: rgba(0, 10, 20, 0.6);
+      border: 2px solid #00f7ff;
+      border-radius: 15px;
+      padding: 25px;
+      max-width: 800px;
+      box-shadow: 0 0 25px rgba(0, 255, 255, 0.2);
+    }
+    .question {
+      font-size: 1.2em;
+      margin-bottom: 20px;
+    }
+    .option {
+      background: rgba(0, 255, 255, 0.05);
+      border: 1px solid rgba(0, 255, 255, 0.4);
+      border-radius: 10px;
+      padding: 12px;
+      margin: 8px auto;
+      width: 80%;
+      cursor: pointer;
+      transition: 0.3s;
+      font-weight: 600;
+    }
+    .option:hover {
+      background: rgba(0, 255, 255, 0.15);
+    }
+    .selected {
+      background: rgba(0, 255, 255, 0.25);
+      border-color: #00ffc8;
+      box-shadow: 0 0 15px #00ffc8;
+    }
+    .correct {
+      background: rgba(0, 255, 100, 0.25);
+      border-color: #00ff88;
+    }
+    .wrong {
+      background: rgba(255, 60, 60, 0.25);
+      border-color: #ff7070;
+    }
+    button {
+      background: linear-gradient(90deg, #00ffc8, #00f7ff);
+      border: none;
+      border-radius: 10px;
+      padding: 10px 25px;
+      color: #000;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 15px;
+      transition: 0.3s;
+      font-family: "Orbitron";
+    }
+    button:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 25px #00ffc8;
+    }
+    .feedback {
+      margin-top: 15px;
+      font-weight: bold;
+    }
+    .popup {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0.8);
+      background: rgba(0, 20, 40, 0.9);
+      border: 2px solid #00ffc8;
+      box-shadow: 0 0 25px #00ffc8;
+      border-radius: 15px;
+      padding: 30px 50px;
+      text-align: center;
+      color: #d6faff;
+      z-index: 1000;
+      opacity: 0;
+      animation: popupShow 0.6s forwards ease-in-out;
+    }
+    @keyframes popupShow {
+      to {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 1;
+      }
+    }
+    .confetti {
+      position: fixed;
+      top: 0;
+      left: 50%;
+      width: 10px;
+      height: 10px;
+      background: #00ffc8;
+      animation: confettiFall 2.5s linear forwards;
+      opacity: 0.9;
+    }
+    @keyframes confettiFall {
+      0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+      100% { transform: translateY(600px) rotate(720deg); opacity: 0; }
+    }
+  </style>
+</head>
+<body>
+  <h1>⚔️ Git Quest – MCQ Challenge</h1>
+  <p>Answer all 5 questions to prove your mastery!</p>
+
+  <div class="container" id="quizBox">
+    <div class="question" id="question"></div>
+    <div id="options"></div>
+    <button id="nextBtn">Next ➡️</button>
+    <div class="feedback" id="feedback"></div>
+  </div>
+
+  <!-- 🎵 Audio -->
+  <audio id="bgMusic" src="assets/bgm.mp3" loop></audio>
+  <audio id="sfxSuccess" src="assets/sfx_success.mp3"></audio>
+  <audio id="sfxFail" src="assets/sfx_wrong.mp3"></audio>
+
+  <script>
+    const questions = [
+      { q: "Which command initializes a new Git repository?", options: ["git init", "git start", "git new", "git repo"], answer: 0 },
+      { q: "Which command stages files for commit?", options: ["git push", "git add", "git stage", "git update"], answer: 1 },
+      { q: "Which command commits your staged changes?", options: ["git save", "git push", "git commit", "git upload"], answer: 2 },
+      { q: "Which command shows your commit history?", options: ["git log", "git history", "git commits", "git show"], answer: 0 },
+      { q: "Which command sends your commits to GitHub?", options: ["git send", "git push", "git upload", "git export"], answer: 1 }
+    ];
+
+    let currentQ = 0;
+    let score = 0;
+    const questionBox = document.getElementById("question");
+    const optionsBox = document.getElementById("options");
+    const feedback = document.getElementById("feedback");
+    const nextBtn = document.getElementById("nextBtn");
+    const bgMusic = document.getElementById("bgMusic");
+    const sfxSuccess = document.getElementById("sfxSuccess");
+    const sfxFail = document.getElementById("sfxFail");
+
+    // 🎵 Background music (handles autoplay block)
+    bgMusic.volume = 0.3;
+    bgMusic.play().catch(() => {
+      console.log("Autoplay blocked. Music will start on first click.");
+      document.body.addEventListener("click", () => bgMusic.play(), { once: true });
+    });
+
+    function loadQuestion() {
+      const q = questions[currentQ];
+      questionBox.textContent = `Q${currentQ + 1}: ${q.q}`;
+      optionsBox.innerHTML = "";
+      feedback.textContent = "";
+      q.options.forEach((opt, i) => {
+        const div = document.createElement("div");
+        div.className = "option";
+        div.textContent = opt;
+        div.onclick = () => selectAnswer(i, div);
+        optionsBox.appendChild(div);
+      });
+      nextBtn.style.display = "none";
+    }
+
+    function selectAnswer(i, el) {
+      const q = questions[currentQ];
+      const allOptions = document.querySelectorAll(".option");
+      allOptions.forEach(opt => opt.classList.remove("selected", "correct", "wrong"));
+      el.classList.add("selected");
+
+      if (i === q.answer) {
+        el.classList.add("correct");
+        feedback.innerHTML = "✅ Correct!";
+        feedback.style.color = "#00ffc8";
+        sfxSuccess.play();
+        score++;
+      } else {
+        el.classList.add("wrong");
+        feedback.innerHTML = "❌ Wrong!";
+        feedback.style.color = "#ff6666";
+        sfxFail.play();
+        allOptions[q.answer].classList.add("correct");
+      }
+
+      nextBtn.style.display = "inline-block";
+    }
+
+    nextBtn.onclick = () => {
+      currentQ++;
+      if (currentQ < questions.length) {
+        loadQuestion();
+      } else {
+        showCompletion();
+      }
+    };
+
+    function showCompletion() {
+      bgMusic.pause(); // stop background music
+      document.body.innerHTML = `
+        <div class="popup">
+          <h2>🎉 Git Quest Completed!</h2>
+          <p>You scored ${score}/${questions.length}</p>
+          <p>✨ Level Up! Next Quest Unlocked: Docker Quest 🐳</p>
+          <button onclick="goToMap()">Go to World Map ➜</button>
+        </div>`;
+      launchConfetti();
+
+      // Update XP and unlock Docker quest
+      const unlocked = JSON.parse(localStorage.getItem("unlockedQuests") || "[]");
+      if (!unlocked.includes("Docker Quest")) unlocked.push("Docker Quest");
+      localStorage.setItem("unlockedQuests", JSON.stringify(unlocked));
+      localStorage.setItem("xp", parseInt(localStorage.getItem("xp") || 0) + 300);
+      localStorage.setItem("nextQuest", "docker");
+
+      setTimeout(() => goToMap(), 5000);
+    }
+
+    function goToMap() {
+      window.location.href = "world.html";
+    }
+
+    function launchConfetti() {
+      for (let i = 0; i < 40; i++) {
+        const c = document.createElement("div");
+        c.classList.add("confetti");
+        c.style.left = Math.random() * window.innerWidth + "px";
+        c.style.background = ["#00f7ff", "#00ffc8", "#ff7b9b"][Math.floor(Math.random() * 3)];
+        c.style.animationDuration = 1.5 + Math.random() * 2 + "s";
+        document.body.appendChild(c);
+        setTimeout(() => c.remove(), 3000);
+      }
+    }
+
+    loadQuestion();
+  </script>
+</body>
+</html>

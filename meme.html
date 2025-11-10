@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>😂 DevOpsQuest — Meme Challenge Zone</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="meme-body">
+
+  <header class="meme-header">
+    <img src="assets/logo.png" alt="DevOpsQuest" class="meme-logo">
+    <h1>😂 Meme Challenge Zone</h1>
+    <p>Because even Jenkins needs a laugh sometimes 💀</p>
+  </header>
+
+  <main class="meme-container">
+    <div class="meme-box">
+      <img id="memeImg" src="assets/meme1.png" alt="Meme" class="meme-img" />
+      <h2 id="memeQuestion">What’s wrong in this meme? 🤔</h2>
+      <div id="memeOptions" class="meme-options"></div>
+      <p id="memeFeedback" class="meme-feedback"></p>
+    </div>
+
+    <div class="meme-controls">
+      <button id="nextMeme" class="primary" hidden>➡ Next Meme</button>
+      <button id="exitWorld" class="back-btn">🏠 Exit to World</button>
+    </div>
+  </main>
+
+  <audio id="sfxCorrect" src="assets/sfx_click.mp3"></audio>
+  <audio id="sfxWrong" src="assets/sfx_select.mp3"></audio>
+
+  <!-- Make sure this path is correct -->
+  <script src="meme.js"></script>
+</body>
+</html>

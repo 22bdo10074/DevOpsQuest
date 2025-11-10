@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>🐳 Dockerfile & Images Quest - DevOpsQuest</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    body {
+      font-family: "Orbitron", "Rajdhani", sans-serif;
+      background: radial-gradient(circle at 30% 20%, #010d20, #000);
+      color: #d6faff;
+      text-align: center;
+      padding: 30px;
+      overflow-x: hidden;
+    }
+
+    h1 {
+      color: #00f7ff;
+      text-shadow: 0 0 20px #00f7ff;
+    }
+
+    .panel {
+      background: rgba(0, 25, 45, 0.7);
+      border: 2px solid rgba(0,255,255,0.2);
+      border-radius: 15px;
+      padding: 25px;
+      width: 85%;
+      max-width: 900px;
+      margin: 25px auto;
+      box-shadow: 0 0 25px rgba(0,255,255,0.15);
+      transition: 0.4s ease;
+    }
+
+    ul {
+      text-align: left;
+      line-height: 1.8;
+      color: #bafcff;
+      font-size: 1.05em;
+    }
+
+    button {
+      background: linear-gradient(90deg, #00ffc8, #00f7ff);
+      color: #001821;
+      border: none;
+      border-radius: 10px;
+      font-weight: bold;
+      padding: 12px 28px;
+      font-size: 1.1em;
+      margin-top: 15px;
+      cursor: pointer;
+      box-shadow: 0 0 25px rgba(0,255,255,0.2);
+      transition: 0.25s;
+    }
+
+    button:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 35px #00ffc8;
+    }
+
+    .option {
+      display: block;
+      border: 2px solid rgba(0,255,255,0.2);
+      border-radius: 10px;
+      padding: 10px;
+      margin: 10px auto;
+      max-width: 600px;
+      cursor: pointer;
+      transition: 0.3s;
+      background: rgba(0,255,255,0.05);
+      color: #d6faff;
+      font-weight: 600;
+    }
+
+    .option:hover {
+      background: rgba(0,255,255,0.15);
+      transform: scale(1.02);
+    }
+
+    .option.correct {
+      background: rgba(0,255,100,0.2);
+      border-color: #00ffae;
+      color: #00ffae;
+    }
+
+    .option.wrong {
+      background: rgba(255,50,100,0.2);
+      border-color: #ff6b88;
+      color: #ff6b88;
+    }
+
+    .correct-text {
+      color: #00ffae;
+      text-shadow: 0 0 10px #00ffae;
+    }
+
+    .wrong-text {
+      color: #ff6b88;
+      text-shadow: 0 0 10px #ff6b88;
+    }
+
+    #feedback {
+      margin-top: 15px;
+      font-weight: 700;
+      min-height: 30px;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>🐳 Dockerfile & Images Quest</h1>
+
+  <!-- 📘 LEARNING PHASE -->
+  <div id="learnPanel" class="panel">
+    <h2>📘 Learn about Dockerfile, Images & Docker Hub</h2>
+    <ul>
+      <li><b>Dockerfile:</b> A text file containing a set of instructions to build a Docker image.</li>
+      <li><b>docker build -t myapp .</b> → Builds an image from the Dockerfile in the current directory.</li>
+      <li><b>FROM</b> → Specifies base image (e.g., <code>FROM ubuntu:latest</code>).</li>
+      <li><b>COPY</b> / <b>ADD</b> → Copies files from local system into the image.</li>
+      <li><b>RUN</b> → Executes commands while building the image.</li>
+      <li><b>CMD</b> → Defines the default command that runs when container starts.</li>
+      <li><b>Docker Hub:</b> A cloud-based repository to store, pull, and share Docker images globally.</li>
+      <li><b>docker push</b> / <b>docker pull</b> → Used to upload or download images from Docker Hub.</li>
+    </ul>
+    <button id="startQuiz">⚡ Start MCQ Challenge</button>
+  </div>
+
+  <!-- 🧠 QUIZ PHASE -->
+  <div id="quizPanel" class="panel" style="display:none;">
+    <h2>🧠 Dockerfile & Images MCQ Challenge</h2>
+    <p id="questionText" style="font-size:1.1em;"></p>
+    <div id="optionsContainer"></div>
+    <div id="feedback"></div>
+    <button id="nextBtn" style="display:none;">Next ➡</button>
+  </div>
+
+  <!-- 🎵 Sounds -->
+  <audio id="bgMusic" src="assets/bgm.mp3" loop></audio>
+  <audio id="sfxSuccess" src="assets/sfx_success.mp3"></audio>
+  <audio id="sfxFail" src="assets/sfx_wrong.mp3"></audio>
+
+  <script>
+    const learnPanel = document.getElementById("learnPanel");
+    const quizPanel = document.getElementById("quizPanel");
+    const questionText = document.getElementById("questionText");
+    const optionsContainer = document.getElementById("optionsContainer");
+    const feedback = document.getElementById("feedback");
+    const nextBtn = document.getElementById("nextBtn");
+    const startQuiz = document.getElementById("startQuiz");
+    const bgMusic = document.getElementById("bgMusic");
+    const sfxSuccess = document.getElementById("sfxSuccess");
+    const sfxFail = document.getElementById("sfxFail");
+
+    // 🎵 Play background music
+    bgMusic.volume = 0.3;
+    bgMusic.play().catch(() => console.log("Music autoplay blocked by browser."));
+
+    const quizData = [
+      {
+        q: "1️⃣ What is a Dockerfile used for?",
+        options: [
+          "To create containers manually",
+          "To define steps for building Docker images",
+          "To manage Kubernetes clusters",
+          "To configure Docker volumes"
+        ],
+        answer: 1
+      },
+      {
+        q: "2️⃣ Which command builds an image from a Dockerfile?",
+        options: [
+          "docker create",
+          "docker build -t myimage .",
+          "docker run myimage",
+          "docker make image"
+        ],
+        answer: 1
+      },
+      {
+        q: "3️⃣ Which instruction sets the base image in a Dockerfile?",
+        options: ["FROM", "RUN", "CMD", "ENV"],
+        answer: 0
+      },
+      {
+        q: "4️⃣ What does Docker Hub provide?",
+        options: [
+          "Source code editor",
+          "A place to store and share Docker images",
+          "Monitoring dashboards",
+          "Container runtime logs"
+        ],
+        answer: 1
+      },
+      {
+        q: "5️⃣ Which command uploads your image to Docker Hub?",
+        options: [
+          "docker push",
+          "docker upload",
+          "docker send",
+          "docker export"
+        ],
+        answer: 0
+      }
+    ];
+
+    let currentQ = 0;
+    let score = 0;
+
+    startQuiz.addEventListener("click", () => {
+      learnPanel.style.display = "none";
+      quizPanel.style.display = "block";
+      bgMusic.currentTime = 0;
+      bgMusic.play();
+      loadQuestion();
+    });
+
+    function loadQuestion() {
+      feedback.textContent = "";
+      nextBtn.style.display = "none";
+      const q = quizData[currentQ];
+      questionText.textContent = q.q;
+      optionsContainer.innerHTML = "";
+
+      q.options.forEach((opt, i) => {
+        const div = document.createElement("div");
+        div.className = "option";
+        div.textContent = opt;
+        div.onclick = () => checkAnswer(i, div);
+        optionsContainer.appendChild(div);
+      });
+    }
+
+    function checkAnswer(selectedIndex, selectedDiv) {
+      const q = quizData[currentQ];
+      const options = document.querySelectorAll(".option");
+
+      // Disable further clicks
+      options.forEach(opt => opt.style.pointerEvents = "none");
+
+      if (selectedIndex === q.answer) {
+        selectedDiv.classList.add("correct");
+        feedback.textContent = "✅ Correct!";
+        feedback.className = "correct-text";
+        sfxSuccess.play();
+        score++;
+      } else {
+        selectedDiv.classList.add("wrong");
+        options[q.answer].classList.add("correct");
+        feedback.textContent = "❌ Wrong!";
+        feedback.className = "wrong-text";
+        sfxFail.play();
+      }
+
+      nextBtn.style.display = "inline-block";
+    }
+
+    nextBtn.addEventListener("click", () => {
+      currentQ++;
+      if (currentQ < quizData.length) {
+        loadQuestion();
+      } else {
+        finishQuiz();
+      }
+    });
+
+    function finishQuiz() {
+      quizPanel.innerHTML = `
+        <h2>🎉 Dockerfile Quest Complete!</h2>
+        <p>You scored ${score} / ${quizData.length}</p>
+        <p class='correct-text'>🏆 Great work! You've mastered Dockerfile & Docker Hub.</p>
+        <p>🎵 Redirecting to World Map...</p>
+      `;
+
+      // ✅ XP and Unlock Update
+      const unlocked = JSON.parse(localStorage.getItem("unlockedQuests") || "[]");
+      if (!unlocked.includes("Kubernetes Quest")) unlocked.push("Kubernetes Quest");
+      localStorage.setItem("unlockedQuests", JSON.stringify(unlocked));
+      localStorage.setItem("xp", parseInt(localStorage.getItem("xp") || 0) + 400);
+      localStorage.setItem("nextQuest", "kubernetes");
+
+      // 🥳 Confetti effect
+      const confetti = document.createElement("div");
+      confetti.innerHTML = "🎊🎉✨";
+      confetti.style.fontSize = "40px";
+      confetti.style.marginTop = "20px";
+      quizPanel.appendChild(confetti);
+
+      // Stop music and redirect
+      setTimeout(() => {
+        bgMusic.pause();
+        window.location.href = "world.html";
+      }, 5000);
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>🧩 DevOps Puzzle Arena</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="puzzle-body">
+  <header class="puzzle-header">
+    <img src="assets/logo.png" class="logo" />
+    <h1>🧩 Fix the Broken Pipeline</h1>
+    <p>Drag the DevOps steps into the correct order</p>
+  </header>
+
+  <main class="puzzle-main">
+    <div id="bugDialogue" class="bug-dialogue">😈 “Hehehe… I swapped your pipeline steps!”</div>
+
+    <section class="steps-container">
+      <div class="steps-pool">
+        <h3>🧠 Available Steps</h3>
+        <div class="draggable" draggable="true" data-step="1">1️⃣ Clone Repo</div>
+        <div class="draggable" draggable="true" data-step="2">2️⃣ Build Container</div>
+        <div class="draggable" draggable="true" data-step="3">3️⃣ Deploy App</div>
+        <div class="draggable" draggable="true" data-step="4">4️⃣ Verify Deployment</div>
+      </div>
+
+      <div id="dropZone" class="drop-zone">
+        <h3>🚀 Drop Correct Steps Here</h3>
+      </div>
+    </section>
+
+    <div class="puzzle-controls">
+      <button id="checkBtn" class="primary">✅ Check Order</button>
+      <button id="hintBtn" class="secondary">💡 Hint</button>
+      <button id="backWorldBtn" class="back-btn">🏠 Exit to World</button>
+    </div>
+  </main>
+
+  <audio id="sfxSuccess" src="assets/sfx_success.mp3"></audio>
+  <audio id="sfxFail" src="assets/sfx_fail.mp3"></audio>
+
+  <script src="puzzle.js"></script>
+</body>
+</html>

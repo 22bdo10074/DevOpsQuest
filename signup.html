@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DevOpsQuest - Sign Up</title>
+  <style>
+    body.signup-body {
+      margin: 0;
+      font-family: "Orbitron", "Rajdhani", sans-serif;
+      background: radial-gradient(circle at 20% 20%, #010a1a, #000);
+      color: #d6faff;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+      position: relative;
+    }
+
+    body::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: repeating-linear-gradient(
+        to right, rgba(0,255,255,0.05) 0, rgba(0,255,255,0.05) 1px, transparent 1px, transparent 50px
+      ),
+      repeating-linear-gradient(
+        to bottom, rgba(0,255,255,0.05) 0, rgba(0,255,255,0.05) 1px, transparent 1px, transparent 50px
+      );
+      animation: gridMove 10s linear infinite;
+    }
+    @keyframes gridMove { from {transform: translateY(0);} to {transform: translateY(50px);} }
+
+    .signup-container {
+      position: relative;
+      z-index: 10;
+      text-align: center;
+      padding: 40px 60px;
+      border: 2px solid rgba(0,255,255,0.2);
+      border-radius: 20px;
+      background: rgba(0,20,40,0.8);
+      box-shadow: 0 0 40px rgba(0,255,255,0.2), inset 0 0 25px rgba(0,255,255,0.05);
+      width: 380px;
+      backdrop-filter: blur(8px);
+      animation: floatIn 1.2s ease-out;
+    }
+
+    @keyframes floatIn { from {opacity:0; transform: translateY(40px);} to {opacity:1; transform:translateY(0);} }
+
+    .signup-logo {
+      width: 90px;
+      margin-bottom: 10px;
+      filter: drop-shadow(0 0 12px #00f7ff);
+    }
+
+    .signup-title {
+      color: #00f7ff;
+      text-shadow: 0 0 15px #00f7ff;
+      font-size: 1.3em;
+      margin-bottom: 5px;
+      letter-spacing: 2px;
+    }
+
+    .signup-subtitle {
+      opacity: 0.8;
+      margin-bottom: 25px;
+      font-size: 0.9em;
+    }
+
+    .signup-form input {
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 8px;
+      background: rgba(255,255,255,0.05);
+      color: #00ffc8;
+      margin-bottom: 15px;
+      font-size: 1em;
+      outline: none;
+      transition: all 0.2s ease-in-out;
+    }
+
+    .signup-form input:focus {
+      background: rgba(0,255,255,0.08);
+      box-shadow: 0 0 10px #00ffc8;
+    }
+
+    .btn-signup {
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 8px;
+      background: linear-gradient(90deg, #00ffc8, #00f7ff);
+      color: #001821;
+      font-weight: 700;
+      font-size: 1.1em;
+      cursor: pointer;
+      transition: 0.3s;
+      box-shadow: 0 0 20px rgba(0,255,255,0.3);
+    }
+
+    .btn-signup:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 30px #00ffc8;
+    }
+
+    .divider {
+      margin: 20px 0;
+      font-size: 0.85em;
+      color: #aef;
+      opacity: 0.7;
+    }
+
+    .signup-social {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .social {
+      flex: 1;
+      padding: 10px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      color: #001821;
+      font-weight: bold;
+      font-family: "Orbitron";
+      transition: all 0.3s;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .social img { width: 20px; height: 20px; }
+    .social.google { background: linear-gradient(90deg, #ffca28, #ff7043); }
+    .social.github { background: linear-gradient(90deg, #24292f, #444); color: #fff; }
+    .social:hover { transform: scale(1.05); filter: brightness(1.2); }
+
+    .login-link {
+      margin-top: 20px;
+      font-size: 0.9em;
+    }
+    .login-link a {
+      color: #00f7ff;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    .login-link a:hover { text-shadow: 0 0 10px #00f7ff; }
+  </style>
+</head>
+
+<body class="signup-body">
+  <div class="signup-container">
+    <img src="assets/logo.png" alt="DevOpsQuest" class="signup-logo" />
+    <h1 class="signup-title">JOIN THE DEVOPS REALM</h1>
+    <p class="signup-subtitle">Master DevOps, Earn XP, and Level Up 🧠</p>
+
+    <form id="signupForm" class="signup-form">
+      <input type="text" id="email" placeholder="Email" required />
+      <input type="password" id="password" placeholder="Password" required />
+      <button class="btn-signup">⚡ Create Account</button>
+    </form>
+
+    <p class="divider">or sign up with</p>
+
+    <div class="signup-social">
+      <button type="button" class="social google"><img src="assets/google.png" /> Google</button>
+      <button type="button" class="social github"><img src="assets/github.png" /> GitHub</button>
+    </div>
+
+    <p class="login-link">Already have an account? <a href="login.html">Login Here</a></p>
+  </div>
+
+  <audio id="bgm" src="assets/bgm.mp3" loop></audio>
+  <audio id="portalSound" src="assets/sfx_portal.mp3"></audio>
+
+  <script type="module" src="signup.js"></script>
+</body>
+</html>

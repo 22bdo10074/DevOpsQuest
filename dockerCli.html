@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>🐳 Docker Quest - Learn & Challenge</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    body {
+      font-family: "Orbitron", "Rajdhani", sans-serif;
+      background: radial-gradient(circle at top, #010818, #000);
+      color: #d6faff;
+      text-align: center;
+      padding: 30px;
+      overflow-x: hidden;
+    }
+    h1 {
+      color: #00f7ff;
+      text-shadow: 0 0 18px #00f7ff;
+    }
+    .panel {
+      background: rgba(0, 25, 45, 0.7);
+      border: 2px solid rgba(0, 255, 255, 0.2);
+      border-radius: 15px;
+      padding: 25px;
+      margin: 25px auto;
+      width: 85%;
+      max-width: 800px;
+      box-shadow: 0 0 25px rgba(0,255,255,0.15);
+    }
+    ul {
+      text-align: left;
+      display: inline-block;
+      line-height: 1.8;
+      color: #aef7f7;
+    }
+    button {
+      background: linear-gradient(90deg, #00ffc8, #00f7ff);
+      color: #001821;
+      font-weight: 800;
+      border: none;
+      border-radius: 10px;
+      padding: 12px 30px;
+      cursor: pointer;
+      font-size: 1.1em;
+      box-shadow: 0 0 18px rgba(0,255,255,0.2);
+      transition: all 0.2s;
+    }
+    button:hover { transform: scale(1.05); }
+    .cli {
+      background: rgba(0, 0, 0, 0.85);
+      border: 1px solid #00ffc8;
+      border-radius: 8px;
+      color: #00ffc8;
+      font-family: monospace;
+      padding: 15px;
+      width: 85%;
+      margin: 20px auto;
+      text-align: left;
+      height: 320px;
+      overflow-y: auto;
+      display: none;
+    }
+    .input {
+      width: 80%;
+      border: none;
+      border-radius: 6px;
+      padding: 10px;
+      background: rgba(255,255,255,0.05);
+      color: #00ffc8;
+      font-family: monospace;
+      font-size: 1em;
+      outline: none;
+      margin-top: 10px;
+      display: none;
+    }
+    .msg {
+      margin-top: 10px;
+      font-weight: 700;
+      font-size: 1.1em;
+    }
+    .correct { color: #00ffae; text-shadow: 0 0 10px #00ffae; }
+    .wrong { color: #ff6b88; text-shadow: 0 0 10px #ff6b88; }
+  </style>
+</head>
+<body>
+
+  <h1>🐳 Docker Quest — Learn & Challenge</h1>
+
+  <!-- 📘 LEARNING PHASE -->
+  <div id="learnPanel" class="panel">
+    <h2>📘 Learn Docker Basics</h2>
+    <p>Docker lets you package, ship, and run applications inside lightweight containers.<br>
+      It ensures your app runs consistently across all environments using the same setup.<br>
+      Command-line interface (CLI) is used to interact with Docker directly.
+    </p>
+
+    <ul>
+      <li><b>docker build -t app .</b> → Build an image from a Dockerfile</li>
+      <li><b>docker run -d -p 8080:80 app</b> → Run the image as a container</li>
+      <li><b>docker ps</b> → List all running containers</li>
+      <li><b>docker stop [id]</b> → Stop a running container</li>
+      <li><b>docker images</b> → List available Docker images</li>
+    </ul>
+
+    <button id="startChallenge">⚡ Start Challenge</button>
+  </div>
+
+  <!-- 💻 CLI CHALLENGE -->
+  <div id="challengePanel" class="panel" style="display:none;">
+    <h2>💻 Docker CLI Challenge</h2>
+    <p id="questionText" style="font-size:1.1em; margin-bottom:10px;">Question will appear here...</p>
+    <div id="cli" class="cli">Commander@Docker:~$ <br></div>
+    <input type="text" id="commandInput" class="input" placeholder="Type your Docker command here..." />
+    <div id="feedback" class="msg"></div>
+    <button id="submitBtn" style="display:none;">Run Command</button>
+  </div>
+
+  <!-- 🎵 Music and Sound Effects -->
+  <audio id="bgMusic" src="assets/bgm.mp3" loop></audio>
+  <audio id="sfxSuccess" src="assets/sfx_success.mp3"></audio>
+  <audio id="sfxFail" src="assets/sfx_wrong.mp3"></audio>
+
+  <script>
+    const learnPanel = document.getElementById("learnPanel");
+    const challengePanel = document.getElementById("challengePanel");
+    const cli = document.getElementById("cli");
+    const input = document.getElementById("commandInput");
+    const submitBtn = document.getElementById("submitBtn");
+    const feedback = document.getElementById("feedback");
+    const questionText = document.getElementById("questionText");
+    const startChallenge = document.getElementById("startChallenge");
+
+    const bgMusic = document.getElementById("bgMusic");
+    const sfxSuccess = document.getElementById("sfxSuccess");
+    const sfxFail = document.getElementById("sfxFail");
+
+    // 🎵 Background Music Setup
+    bgMusic.volume = 0.3;
+    bgMusic.play().catch(() => {
+      console.log("Autoplay blocked. Music will play on first click.");
+      document.body.addEventListener("click", () => bgMusic.play(), { once: true });
+    });
+
+    // 🎯 CHALLENGE QUESTIONS
+    const challenges = [
+      { q: "1️⃣ How do you build an image named 'myapp' from a Dockerfile?", a: "docker build -t myapp ." },
+      { q: "2️⃣ How do you run 'myapp' container in detached mode on port 8080?", a: "docker run -d -p 8080:80 myapp" },
+      { q: "3️⃣ How can you list all running containers?", a: "docker ps" },
+      { q: "4️⃣ How do you stop a container with ID 123abc?", a: "docker stop 123abc" },
+      { q: "5️⃣ Which command shows all available images?", a: "docker images" }
+    ];
+
+    let current = 0;
+
+    // 🚀 Start challenge
+    startChallenge.addEventListener("click", () => {
+      learnPanel.style.display = "none";
+      challengePanel.style.display = "block";
+      cli.style.display = "block";
+      input.style.display = "block";
+      submitBtn.style.display = "inline-block";
+      nextQuestion();
+    });
+
+    // 📜 Display next question
+    function nextQuestion() {
+      if (current < challenges.length) {
+        questionText.textContent = challenges[current].q;
+        feedback.textContent = "";
+        cli.innerHTML += `<br><span style='color:#0ff;'>Q${current+1}:</span> ${challenges[current].q}<br>`;
+      } else {
+        endChallenge();
+      }
+    }
+
+    // ▶ Handle answer submission
+    submitBtn.addEventListener("click", checkAnswer);
+    input.addEventListener("keypress", e => {
+      if (e.key === "Enter") checkAnswer();
+    });
+
+    function checkAnswer() {
+      const cmd = input.value.trim();
+      if (!cmd) return;
+
+      cli.innerHTML += `<span style='color:#00f7ff;'>$ ${cmd}</span><br>`;
+      const correct = challenges[current].a;
+
+      if (cmd.toLowerCase() === correct.toLowerCase()) {
+        feedback.textContent = "✅ Correct!";
+        feedback.className = "msg correct";
+        cli.innerHTML += "<span style='color:#00ffae;'>✔ Command executed successfully!</span><br>";
+        sfxSuccess.play();
+        current++;
+        input.value = "";
+        setTimeout(nextQuestion, 900);
+      } else {
+        feedback.textContent = "❌ Incorrect! Try again.";
+        feedback.className = "msg wrong";
+        cli.innerHTML += "<span style='color:#ff6b88;'>Error: Command not recognized.</span><br>";
+        sfxFail.play();
+      }
+      cli.scrollTop = cli.scrollHeight;
+    }
+
+    // 🎉 End of Challenge
+    function endChallenge() {
+      cli.innerHTML += `<br><span style='color:#00ffae;'>🎉 Congratulations! You’ve completed the Docker CLI Challenge!</span><br>`;
+      feedback.textContent = "🏆 Docker Quest Complete! Unlocking Kubernetes Quest...";
+      feedback.className = "msg correct";
+
+      // Stop music and unlock next quest
+      bgMusic.pause();
+
+      const unlocked = JSON.parse(localStorage.getItem("unlockedQuests") || "[]");
+      if (!unlocked.includes("Kubernetes Quest")) unlocked.push("Kubernetes Quest");
+      localStorage.setItem("unlockedQuests", JSON.stringify(unlocked));
+      localStorage.setItem("nextQuest", "kubernetes");
+      localStorage.setItem("xp", parseInt(localStorage.getItem("xp") || 0) + 400);
+
+      setTimeout(() => {
+        window.location.href = "dockerPuzzle.html";
+      }, 4000);
+    }
+  </script>
+</body>
+</html>

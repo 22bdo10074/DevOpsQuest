@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Select Your DevOps Hero</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="character-body">
+
+  <!-- Background -->
+  <div class="character-bg"></div>
+  <div class="energy-pulse"></div>
+
+  <!-- Header -->
+  <header class="character-header">
+    <img src="assets/logo.png" alt="DevOpsQuest Logo" class="char-logo" />
+    <h1 class="character-title">Choose Your DevOps Champion ⚔️</h1>
+    <p class="character-subtitle">Each hero masters a DevOps Power — choose wisely!</p>
+  </header>
+
+  <!-- Characters -->
+  <section class="character-grid">
+    <div class="char-card" data-hero="Git Guardian">
+      <img src="assets/git_guardian.png" alt="Git Guardian">
+      <h2>Git Guardian</h2>
+      <p>Master of Version Control 🧩</p>
+    </div>
+
+    <div class="char-card" data-hero="Docker Knight">
+      <img src="assets/docker_knight.png" alt="Docker Knight">
+      <h2>Docker Knight</h2>
+      <p>Container Conqueror 🛡️</p>
+    </div>
+
+    <div class="char-card" data-hero="Kubernetes Sage">
+      <img src="assets/k8s_sage.png" alt="Kubernetes Sage">
+      <h2>Kubernetes Sage</h2>
+      <p>Lord of the Clusters ☸️</p>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="character-footer">
+    <button id="startBtn" class="btn-start" disabled>✨ Enter World</button>
+  </footer>
+
+  <!-- Sounds -->
+  <audio id="bgm" src="assets/bgm.mp3" loop></audio>
+  <audio id="sfxSelect" src="assets/sfx_select.mp3"></audio>
+  <audio id="sfxClick" src="assets/sfx_click.mp3"></audio>
+
+  <script src="character.js"></script>
+</body>
+</html>

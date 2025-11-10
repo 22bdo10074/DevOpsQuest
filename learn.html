@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DevOpsQuest — Learn Quest</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    body {
+      font-family: "Orbitron", sans-serif;
+      background: radial-gradient(circle at 20% 20%, #010a18, #000);
+      color: #d6faff;
+      text-align: center;
+      padding: 25px;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    h1 {
+      color: #00f7ff;
+      text-shadow: 0 0 15px #00f7ff;
+      font-size: 2.3em;
+      margin-top: 20px;
+    }
+
+    h2 {
+      color: #00ffc8;
+      margin-top: 15px;
+      text-shadow: 0 0 10px #00ffc8;
+    }
+
+    pre {
+      background: rgba(0, 255, 255, 0.05);
+      border-left: 3px solid #00ffc8;
+      padding: 12px;
+      text-align: left;
+      color: #bafaff;
+      border-radius: 10px;
+      line-height: 1.6;
+      width: 80%;
+      margin: 10px auto;
+      font-family: monospace;
+      overflow-x: auto;
+    }
+
+    p {
+      width: 80%;
+      margin: 15px auto;
+      font-size: 1.1em;
+      line-height: 1.5em;
+      color: #b0e9ff;
+    }
+
+    button {
+      margin: 25px 8px;
+      padding: 12px 25px;
+      border: none;
+      border-radius: 12px;
+      font-family: inherit;
+      font-weight: bold;
+      font-size: 1em;
+      cursor: pointer;
+      transition: 0.3s;
+      box-shadow: 0 0 20px rgba(0,255,255,0.3);
+    }
+
+    .primary {
+      background: linear-gradient(90deg, #00f7ff, #00ffc8);
+      color: #000;
+    }
+
+    .secondary {
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.2);
+      color: #d6faff;
+    }
+
+    button:hover {
+      transform: scale(1.07);
+      box-shadow: 0 0 30px rgba(0,255,255,0.5);
+    }
+
+    .footer {
+      margin-top: 40px;
+      color: #7aa3b3;
+      font-size: 0.9em;
+      opacity: 0.7;
+    }
+
+    .glow-line {
+      height: 3px;
+      width: 80%;
+      margin: 20px auto;
+      background: linear-gradient(90deg, transparent, #00ffc8, transparent);
+      box-shadow: 0 0 15px #00ffc8;
+    }
+
+    #lessonCard {
+      background: rgba(0, 20, 40, 0.7);
+      border: 2px solid rgba(0, 255, 255, 0.25);
+      box-shadow: 0 0 25px rgba(0,255,255,0.1);
+      border-radius: 15px;
+      width: 85%;
+      margin: 20px auto;
+      padding: 25px;
+      text-align: center;
+      animation: fadeIn 1s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+
+  <h1 id="learnTitle">📘 Learn Quest</h1>
+  <div class="glow-line"></div>
+
+  <div id="lessonCard">
+    <h2 id="lessonTitle">Lesson Title</h2>
+    <p id="lessonDesc">Lesson details will appear here...</p>
+  </div>
+
+  <div>
+    <button id="startMission" class="primary">🚀 Start Mission</button>
+    <button id="backWorld" class="secondary">🏠 Back to World</button>
+  </div>
+
+  <div class="footer">© 2025 DevOpsQuest | Learn & Level Up ⚙️</div>
+
+  <!-- 🎵 Audio -->
+  <audio id="sfxClick" src="assets/sfx_click.mp3"></audio>
+  <audio id="bgMusic" src="assets/bgm.mp3" loop autoplay></audio>
+
+  <!-- ⚙️ Script -->
+  <script src="learn.js"></script>
+</body>
+</html>

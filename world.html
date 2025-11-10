@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DevOpsQuest - The DevOps Realm 🌍</title>
+  <link rel="stylesheet" href="style.css" />
+
+  <style>
+    body {
+      font-family: "Orbitron", sans-serif;
+      background: radial-gradient(circle at 20% 20%, #020d1f, #000);
+      color: #d6faff;
+      overflow-x: hidden;
+    }
+
+    header {
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    .world-title {
+      color: #00f7ff;
+      text-shadow: 0 0 20px #00f7ff;
+    }
+
+    .xp-section {
+      margin-top: 10px;
+    }
+
+    .xp-bar {
+      background: rgba(0,255,255,0.1);
+      width: 60%;
+      height: 12px;
+      border-radius: 12px;
+      margin: 5px auto;
+      overflow: hidden;
+      box-shadow: 0 0 20px rgba(0,255,255,0.2);
+    }
+
+    .xp-fill {
+      width: 0%;
+      height: 100%;
+      background: linear-gradient(90deg, #00ffc8, #00f7ff);
+      border-radius: 12px;
+      transition: width 1s ease-in-out;
+      box-shadow: 0 0 20px #00ffc8;
+    }
+
+    .header-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .primary, .back-btn {
+      border: none;
+      border-radius: 10px;
+      padding: 10px 25px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: 0.3s;
+    }
+
+    .primary {
+      background: linear-gradient(90deg, #00ffc8, #00f7ff);
+      color: #001821;
+    }
+
+    .back-btn {
+      background: #ff008c;
+      color: #fff;
+    }
+
+    .hero-section {
+      text-align: center;
+      margin-top: 25px;
+    }
+
+    .hero-img {
+      width: 110px;
+      height: 110px;
+      border-radius: 50%;
+      border: 2px solid #00ffc8;
+      box-shadow: 0 0 20px #00ffc8;
+    }
+
+    .hero-badges img {
+      width: 35px;
+      height: 35px;
+      border-radius: 50%;
+      border: 2px solid #00ffc8;
+      margin: 4px;
+      transition: 0.3s;
+    }
+
+    .hero-badges img:hover {
+      transform: scale(1.15);
+      box-shadow: 0 0 25px #00ffc8;
+    }
+
+    .world-map {
+      position: relative;
+      text-align: center;
+      margin: 40px auto;
+      width: 80%;
+    }
+
+    .map-img {
+      width: 100%;
+      opacity: 0.85;
+      border-radius: 15px;
+    }
+
+    .quest {
+      position: absolute;
+      cursor: pointer;
+      text-align: center;
+      transition: 0.3s;
+    }
+
+    .quest img {
+      width: 80px;
+      filter: drop-shadow(0 0 10px #00ffc8);
+    }
+
+    .quest:hover img {
+      transform: scale(1.1);
+      filter: drop-shadow(0 0 25px #00ffc8);
+    }
+
+    .quest-label {
+      display: block;
+      margin-top: 5px;
+      color: #00ffc8;
+      font-size: 0.9em;
+    }
+
+    .modal {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0, 20, 40, 0.9);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+    }
+
+    .modal-content {
+      background: rgba(0,255,255,0.1);
+      border: 2px solid #00ffc8;
+      border-radius: 15px;
+      text-align: center;
+      padding: 30px;
+      color: white;
+      box-shadow: 0 0 25px #00ffc8;
+      width: 400px;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.9); }
+      to { opacity: 1; transform: scale(1); }
+    }
+  </style>
+</head>
+
+<body class="world-body">
+
+  <header>
+    <h1 class="world-title">🌌 The DevOps Realm</h1>
+    <p>Choose your mission, Commander 👩‍💻</p>
+
+    <div class="xp-section">
+      <p id="levelDisplay">Level 1</p>
+      <div class="xp-bar"><div id="xpFill" class="xp-fill"></div></div>
+      <p>XP: <span id="xpValue">0</span></p>
+    </div>
+
+    <div class="header-buttons">
+      <button id="leaderboardBtn" class="primary">🏆 Leaderboard</button>
+      <button id="backBtn" class="back-btn">🏠 Back</button>
+    </div>
+  </header>
+
+  <div class="hero-section">
+    <img id="heroImage" src="assets/hero.png" alt="Hero" class="hero-img" />
+    <div class="hero-info">
+      <h2 id="heroName">Your Champion</h2>
+      <p>XP: <span id="heroXP">0</span></p>
+      <div class="hero-badges"></div>
+    </div>
+  </div>
+
+  <div class="world-map">
+    <img src="assets/world_map.png" alt="Map" class="map-img" />
+
+    <div class="quest git" data-quest="Git Quest" style="top: 48%; left: 28%;">
+      <img src="assets/quest_git.png" alt="Git Quest" />
+      <span class="quest-label">Git Quest</span>
+    </div>
+
+    <div class="quest docker" data-quest="Docker Quest" style="top: 28%; left: 46%;">
+      <img src="assets/quest_docker.png" alt="Docker Quest" />
+      <span class="quest-label">Docker Quest</span>
+    </div>
+
+    <div class="quest k8s" data-quest="Kubernetes Quest" style="top: 48%; left: 65%;">
+      <img src="assets/quest_k8s.png" alt="Kubernetes Quest" />
+      <span class="quest-label">Kubernetes Quest</span>
+    </div>
+  </div>
+
+  <div id="questModal" class="modal">
+    <div class="modal-content">
+      <h2 id="questTitle">Quest Title</h2>
+      <p id="questDesc">Quest details will go here...</p>
+      <div>
+        <button id="startQuest" class="primary">⚡ Start Quest</button>
+        <button id="closeModal" class="back-btn">❌ Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <audio id="bgmWorld" src="assets/bgm.mp3" loop></audio>
+  <audio id="sfxClick" src="assets/sfx_click.mp3"></audio>
+
+  <script type="module" src="world.js"></script>
+</body>
+</html>

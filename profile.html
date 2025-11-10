@@ -1,0 +1,5 @@
+let badges = JSON.parse(localStorage.getItem("badges") || "[]");
+if (!badges.includes(currentQuest)) {
+  badges.push(currentQuest);
+  localStorage.setItem("badges", JSON.stringify(badges));
+}
