@@ -1,4 +1,6 @@
 {
+  "public": "public",
+  "includeFiles": "assets/**/*",
   "redirects": [
     {
       "source": "/",
