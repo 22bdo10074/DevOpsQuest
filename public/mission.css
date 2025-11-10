@@ -1,0 +1,6 @@
+#terminalOutput p {
+  font-family: "Courier New", monospace;
+  font-size: 15px;
+  color: #00f7ff;
+  margin: 4px 0;
+}

@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>⚔️ Mission: Git Quest</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    body {
+      font-family: "Orbitron", sans-serif;
+      background: radial-gradient(circle at 20% 20%, #010a1a, #000);
+      color: #d6faff;
+      text-align: center;
+      padding: 25px;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    h1 {
+      color: #00f7ff;
+      text-shadow: 0 0 15px #00f7ff;
+    }
+
+    .task-box {
+      background: rgba(0, 20, 40, 0.7);
+      border: 2px solid rgba(0, 255, 255, 0.25);
+      border-radius: 15px;
+      box-shadow: 0 0 25px rgba(0,255,255,0.15);
+      padding: 25px;
+      width: 80%;
+      margin: 30px auto;
+      text-align: left;
+    }
+
+    .task-label {
+      color: #ff62c0;
+      font-weight: bold;
+      margin-bottom: 10px;
+      display: block;
+    }
+
+    input {
+      width: 95%;
+      background: rgba(255,255,255,0.05);
+      border: none;
+      border-radius: 8px;
+      color: #00ffc8;
+      padding: 10px;
+      font-family: monospace;
+      font-size: 1em;
+      margin-top: 5px;
+      outline: none;
+    }
+
+    button {
+      margin-top: 20px;
+      padding: 10px 25px;
+      border: none;
+      border-radius: 10px;
+      background: linear-gradient(90deg, #00ffc8, #00f7ff);
+      color: #000;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 0 20px rgba(0,255,255,0.3);
+      transition: 0.3s;
+    }
+
+    button:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 30px #00ffc8;
+    }
+
+    .result {
+      margin-top: 20px;
+      font-weight: bold;
+      font-size: 1.1em;
+    }
+
+    .success { color: #00ffc8; }
+    .error { color: #ff6b88; }
+  </style>
+</head>
+<body>
+  <h1 id="missionTitle">⚔️ Mission: Git Quest</h1>
+  <p>Type the correct Git commands to complete your DevOps mission!</p>
+
+  <div class="task-box">
+    <span id="taskLabel" class="task-label"></span>
+    <input type="text" id="commandInput" placeholder="Type your Git command here..." />
+    <button id="submitBtn">Submit</button>
+    <div id="result" class="result"></div>
+  </div>
+
+  <!-- 🎵 Audio -->
+  <audio id="bgMusic" src="assets/bgm.mp3" loop></audio>
+  <audio id="sfxSuccess" src="assets/sfx_success.mp3"></audio>
+  <audio id="sfxFail" src="assets/sfx_wrong.mp3"></audio>
+
+  <script>
+    // 🌟 Define Git Quest tasks
+    const tasks = [
+      { question: "Command to initialize a Git repository?", answer: "git init" },
+      { question: "Command to stage all files for commit?", answer: "git add ." },
+      { question: "Command to commit staged files with a message?", answer: 'git commit -m "message"' },
+      { question: "Command to check the status of your repository?", answer: "git status" },
+      { question: "Command to view the commit history?", answer: "git log" }
+    ];
+
+    let currentTask = 0;
+    const taskLabel = document.getElementById("taskLabel");
+    const commandInput = document.getElementById("commandInput");
+    const result = document.getElementById("result");
+    const successSound = document.getElementById("sfxSuccess");
+    const failSound = document.getElementById("sfxFail");
+    const bgMusic = document.getElementById("bgMusic");
+
+    // 🎵 Background music fix (works after first user interaction)
+    function enableMusic() {
+      bgMusic.volume = 0.4;
+      bgMusic.play().catch(() => {
+        console.log("Autoplay blocked; will start after user action.");
+      });
+    }
+
+    document.body.addEventListener("click", enableMusic, { once: true });
+    document.body.addEventListener("keydown", enableMusic, { once: true });
+
+    // 🎯 Show current question
+    function loadTask() {
+      const t = tasks[currentTask];
+      taskLabel.textContent = `💬 Task: ${t.question}`;
+      commandInput.value = "";
+      result.textContent = "";
+    }
+
+    // 🧠 Submit command
+    document.getElementById("submitBtn").addEventListener("click", () => {
+      const input = commandInput.value.trim();
+      const correct = tasks[currentTask].answer;
+      if (input === correct) {
+        successSound.play();
+        result.textContent = "✅ Correct!";
+        result.className = "result success";
+
+        // Reward XP
+        let xp = parseInt(localStorage.getItem("xp") || 0);
+        localStorage.setItem("xp", xp + 100);
+
+        // Move to next task
+        currentTask++;
+        if (currentTask < tasks.length) {
+          setTimeout(loadTask, 1200);
+        } else {
+          missionComplete();
+        }
+      } else {
+        failSound.play();
+        result.textContent = "❌ Incorrect! Try again.";
+        result.className = "result error";
+      }
+    });
+
+    function missionComplete() {
+  bgMusic.pause();
+  // Redirect to Git Puzzle page after 2 seconds
+  document.body.innerHTML = `
+    <h1>✅ CLI Stage Complete!</h1>
+    <p>You've mastered Git commands. Next, arrange the Git workflow steps!</p>
+    <p>Redirecting to <b>Git Puzzle</b>...</p>
+  `;
+  setTimeout(() => {
+    window.location.href = "gitPuzzle.html";
+  }, 2000);
+}
+
+
+    // Initialize
+    loadTask();
+  </script>
+</body>
+</html>

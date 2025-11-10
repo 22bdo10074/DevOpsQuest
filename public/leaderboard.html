@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>🏆 DevOpsQuest Leaderboard</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    body.leaderboard-body {
+      margin: 0;
+      font-family: "Orbitron", sans-serif;
+      background: radial-gradient(circle at 20% 20%, #010a1a, #000);
+      color: #d6faff;
+      text-align: center;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+    .leaderboard-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 40px;
+      background: rgba(0,20,40,0.8);
+      border-bottom: 2px solid rgba(0,255,255,0.2);
+      box-shadow: 0 0 25px rgba(0,255,255,0.2);
+    }
+    h1 {
+      color: #00f7ff;
+      text-shadow: 0 0 18px #00ffc8;
+    }
+    .leaderboard-container {
+      padding: 40px;
+      text-align: center;
+    }
+    .leaderboard-table {
+      width: 90%;
+      max-width: 1000px;
+      margin: 0 auto;
+      border-collapse: collapse;
+      box-shadow: 0 0 25px rgba(0,255,255,0.15);
+    }
+    th, td {
+      padding: 12px;
+      border-bottom: 1px solid rgba(0,255,255,0.2);
+    }
+    th {
+      background: rgba(0,255,255,0.1);
+      color: #00ffc8;
+    }
+    tr:hover {
+      background: rgba(0,255,255,0.05);
+    }
+    .rank {
+      font-weight: bold;
+      color: #00ffc8;
+    }
+    .back-btn {
+      background: linear-gradient(90deg, #00ffc8, #00f7ff);
+      color: #001821;
+      border: none;
+      border-radius: 10px;
+      padding: 10px 25px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .back-btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 25px #00ffc8;
+    }
+  </style>
+</head>
+<body class="leaderboard-body">
+
+  <header class="leaderboard-header">
+    <h1>🏆 DevOpsQuest Leaderboard</h1>
+    <button id="backToWorld" class="back-btn">🌍 Back to World</button>
+  </header>
+
+  <main class="leaderboard-container">
+    <table class="leaderboard-table">
+      <thead>
+        <tr>
+          <th>Rank</th>
+          <th>Hero</th>
+          <th>Commander</th>
+          <th>XP</th>
+          
+        </tr>
+      </thead>
+      <tbody id="leaderboardBody">
+        <tr><td colspan="5">Loading leaderboard...</td></tr>
+      </tbody>
+    </table>
+  </main>
+
+  <!-- 🎵 Background Music + Click Sound -->
+  <audio id="sfxClick" src="assets/sfx_click.mp3"></audio>
+  <audio id="bgmLeaderboard" src="assets/bgm.mp3" loop></audio>
+
+  <script type="module">
+    import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
+
+    const SUPABASE_URL = "https://fqadhqcbhvioyflahslh.supabase.co";
+    const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZxYWRocWNiaHZpb3lmbGFoc2xoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjI3MTU0NjIsImV4cCI6MjA3ODI5MTQ2Mn0.GUjD-8fH47zBoZiJsB01olkypMU3OND61t0wqLvjO5c";
+    const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    const leaderboardBody = document.getElementById("leaderboardBody");
+    const bgm = document.getElementById("bgmLeaderboard");
+    const clickSound = document.getElementById("sfxClick");
+
+    // 🎵 Start background music
+    bgm.volume = 0.3;
+    bgm.play().catch(() => {
+      document.body.addEventListener("click", () => bgm.play(), { once: true });
+    });
+
+    // Button sound
+    document.querySelectorAll("button").forEach(btn => {
+      btn.addEventListener("click", () => {
+        clickSound.currentTime = 0;
+        clickSound.play();
+      });
+    });
+
+    // Back to world
+    document.getElementById("backToWorld").addEventListener("click", () => {
+      window.location.href = "world.html";
+    });
+
+    // 🧠 Fetch leaderboard data
+    async function loadLeaderboard() {
+      const { data, error } = await supabase
+        .from("players")
+        .select("commander_name, hero_name, hero_image, xp")
+        .order("xp", { ascending: false })
+        .limit(50);
+
+      if (error) {
+        leaderboardBody.innerHTML = `<tr><td colspan="5" style="color:red;">❌ Failed to load leaderboard</td></tr>`;
+        console.error(error);
+        return;
+      }
+
+      if (!data || data.length === 0) {
+        leaderboardBody.innerHTML = `<tr><td colspan="5" style="color:#aaa;">No players yet. Be the first!</td></tr>`;
+        return;
+      }
+
+      leaderboardBody.innerHTML = data
+        .map(
+          (player, i) => `
+          <tr>
+            <td class="rank">#${i + 1}</td>
+            <td>
+              <img src="${player.hero_image || "assets/hero_default.png"}" alt="${player.hero_name}" width="50" height="50" style="border-radius:8px; vertical-align:middle; margin-right:8px;">
+              ${player.hero_name}
+            </td>
+            <td>${player.commander_name}</td>
+            <td>${player.xp}</td>
+            
+          </tr>`
+        )
+        .join("");
+    }
+
+    // Load leaderboard immediately
+    loadLeaderboard();
+
+    // ♻️ Auto-refresh every 15 seconds
+    setInterval(loadLeaderboard, 15000);
+  </script>
+</body>
+</html>

@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>☸️ Kubernetes Commands Mastery — DevOpsQuest</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    body {
+      font-family: "Orbitron", "Rajdhani", sans-serif;
+      background: radial-gradient(circle at 25% 25%, #010a1a, #000);
+      color: #d6faff;
+      text-align: center;
+      padding: 30px;
+      overflow-x: hidden;
+    }
+    h1 { color: #00f7ff; text-shadow: 0 0 18px #00f7ff; }
+    .panel {
+      background: rgba(0, 25, 45, 0.7);
+      border: 2px solid rgba(0, 255, 255, 0.2);
+      border-radius: 15px;
+      padding: 25px;
+      margin: 25px auto;
+      width: 85%;
+      max-width: 900px;
+      box-shadow: 0 0 25px rgba(0,255,255,0.15);
+      text-align: left;
+    }
+    ul { line-height: 1.8; color: #bff; font-size: 1.05em; }
+    code { background: rgba(255,255,255,0.1); padding: 2px 6px; border-radius: 5px; color: #00ffc8; }
+    button {
+      background: linear-gradient(90deg, #00ffc8, #00f7ff);
+      color: #001821;
+      font-weight: 800;
+      border: none;
+      border-radius: 10px;
+      padding: 12px 30px;
+      cursor: pointer;
+      font-size: 1.1em;
+      box-shadow: 0 0 18px rgba(0,255,255,0.2);
+      transition: all 0.2s;
+    }
+    button:hover { transform: scale(1.05); box-shadow: 0 0 25px #00ffc8; }
+    .cli {
+      background: rgba(0, 0, 0, 0.85);
+      border: 1px solid #00ffc8;
+      border-radius: 8px;
+      color: #00ffc8;
+      font-family: monospace;
+      padding: 15px;
+      width: 85%;
+      margin: 20px auto;
+      text-align: left;
+      height: 340px;
+      overflow-y: auto;
+      display: none;
+    }
+    .input {
+      width: 80%;
+      border: none;
+      border-radius: 6px;
+      padding: 10px;
+      background: rgba(255,255,255,0.05);
+      color: #00ffc8;
+      font-family: monospace;
+      font-size: 1em;
+      outline: none;
+      margin-top: 10px;
+      display: none;
+    }
+    .msg {
+      margin-top: 10px;
+      font-weight: 700;
+      font-size: 1.1em;
+    }
+    .correct { color: #00ffae; text-shadow: 0 0 10px #00ffae; }
+    .wrong { color: #ff6b88; text-shadow: 0 0 10px #ff6b88; }
+    .confetti {
+      position: fixed; width: 10px; height: 10px; top: 0;
+      animation: fall 2.5s linear forwards;
+    }
+    @keyframes fall {
+      0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+      100% { transform: translateY(600px) rotate(720deg); opacity: 0; }
+    }
+  </style>
+</head>
+<body>
+
+  <h1>☸️ Kubernetes Commands — Learn & CLI Challenge</h1>
+
+  <!-- 📘 Learning Section -->
+  <div id="learnPanel" class="panel">
+    <h2>📘 Learn Core <code>kubectl</code> Commands</h2>
+    <p>Kubernetes uses <b>kubectl</b> as its main command-line tool to manage clusters, pods, deployments, and more.</p>
+    <ul>
+      <li><code>kubectl get pods</code> — Lists all pods in the current namespace.</li>
+      <li><code>kubectl get nodes</code> — Displays all nodes in the cluster.</li>
+      <li><code>kubectl create deployment myapp --image=nginx</code> — Creates a new deployment named <b>myapp</b>.</li>
+      <li><code>kubectl expose deployment myapp --type=LoadBalancer --port=80</code> — Exposes deployment via a Service.</li>
+      <li><code>kubectl apply -f deployment.yaml</code> — Applies configuration from a YAML file.</li>
+      <li><code>kubectl logs pod-name</code> — Shows logs from a specific pod.</li>
+      <li><code>kubectl describe pod pod-name</code> — Provides detailed information about a pod.</li>
+      <li><code>kubectl delete pod pod-name</code> — Deletes a pod.</li>
+      <li><code>kubectl get svc</code> — Lists all services running in the namespace.</li>
+      <li><code>kubectl get all</code> — Displays all resources (Pods, Deployments, Services, etc.).</li>
+      <li><code>kubectl config view</code> — Shows Kubernetes configuration settings.</li>
+      <li><code>kubectl get namespaces</code> — Lists all namespaces.</li>
+    </ul>
+
+    <center><button id="startChallenge">⚡ Start CLI Challenge</button></center>
+  </div>
+
+  <!-- 💻 CLI Challenge -->
+  <div id="challengePanel" class="panel" style="display:none;">
+    <h2>💻 Kubernetes CLI Challenge</h2>
+    <p id="questionText" style="font-size:1.1em;">Question will appear here...</p>
+    <div id="cli" class="cli">Commander@K8s:~$ <br></div>
+    <input type="text" id="commandInput" class="input" placeholder="Type your kubectl command here..." />
+    <div id="feedback" class="msg"></div>
+    <button id="submitBtn" style="display:none;">Run Command</button>
+  </div>
+
+  <!-- 🎵 Audio -->
+  <audio id="bgMusic" src="assets/bgm.mp3" loop></audio>
+  <audio id="sfxSuccess" src="assets/sfx_success.mp3"></audio>
+  <audio id="sfxFail" src="assets/sfx_wrong.mp3"></audio>
+
+  <script>
+    const learnPanel = document.getElementById("learnPanel");
+    const challengePanel = document.getElementById("challengePanel");
+    const cli = document.getElementById("cli");
+    const input = document.getElementById("commandInput");
+    const submitBtn = document.getElementById("submitBtn");
+    const feedback = document.getElementById("feedback");
+    const questionText = document.getElementById("questionText");
+    const startChallenge = document.getElementById("startChallenge");
+
+    const bgMusic = document.getElementById("bgMusic");
+    const sfxSuccess = document.getElementById("sfxSuccess");
+    const sfxFail = document.getElementById("sfxFail");
+
+    // 🎵 Music
+    bgMusic.volume = 0.3;
+    bgMusic.play().catch(() => {
+      document.body.addEventListener("click", () => bgMusic.play(), { once: true });
+    });
+
+    // ⚔️ CLI Challenges
+    const challenges = [
+      { q: "1️⃣ List all pods in the current namespace", a: "kubectl get pods" },
+      { q: "2️⃣ List all nodes in the cluster", a: "kubectl get nodes" },
+      { q: "3️⃣ Create a deployment named 'myapp' using the nginx image", a: "kubectl create deployment myapp --image=nginx" },
+      { q: "4️⃣ Expose 'myapp' deployment as a LoadBalancer on port 80", a: "kubectl expose deployment myapp --type=LoadBalancer --port=80" },
+      { q: "5️⃣ Apply configuration from a file 'deployment.yaml'", a: "kubectl apply -f deployment.yaml" },
+      { q: "6️⃣ Show logs from a pod named 'webapp-pod'", a: "kubectl logs webapp-pod" },
+      { q: "7️⃣ Describe the pod named 'backend-pod'", a: "kubectl describe pod backend-pod" },
+      { q: "8️⃣ Delete the pod named 'old-pod'", a: "kubectl delete pod old-pod" },
+      { q: "9️⃣ View all services in the namespace", a: "kubectl get svc" },
+      { q: "🔟 List all resources in the current namespace", a: "kubectl get all" }
+    ];
+
+    let current = 0;
+
+    // Start Challenge
+    startChallenge.addEventListener("click", () => {
+      learnPanel.style.display = "none";
+      challengePanel.style.display = "block";
+      cli.style.display = "block";
+      input.style.display = "block";
+      submitBtn.style.display = "inline-block";
+      nextQuestion();
+    });
+
+    // Display next question
+    function nextQuestion() {
+      if (current < challenges.length) {
+        questionText.textContent = challenges[current].q;
+        feedback.textContent = "";
+        cli.innerHTML += `<br><span style='color:#0ff;'>Q${current+1}:</span> ${challenges[current].q}<br>`;
+      } else {
+        endChallenge();
+      }
+    }
+
+    submitBtn.addEventListener("click", checkAnswer);
+    input.addEventListener("keypress", e => {
+      if (e.key === "Enter") checkAnswer();
+    });
+
+    // Command Checking Logic
+    function checkAnswer() {
+      const cmd = input.value.trim();
+      if (!cmd) return;
+      cli.innerHTML += `<span style='color:#00f7ff;'>$ ${cmd}</span><br>`;
+      const correct = challenges[current].a;
+      
+      if (cmd.toLowerCase() === correct.toLowerCase()) {
+        feedback.textContent = "✅ Correct!";
+        feedback.className = "msg correct";
+        cli.innerHTML += "<span style='color:#00ffae;'>✔ Command executed successfully!</span><br>";
+        sfxSuccess.play();
+        current++;
+        input.value = "";
+        setTimeout(nextQuestion, 800);
+      } else {
+        feedback.textContent = "❌ Incorrect! Try again.";
+        feedback.className = "msg wrong";
+        cli.innerHTML += "<span style='color:#ff6b88;'>Error: Command not recognized.</span><br>";
+        sfxFail.play();
+      }
+      cli.scrollTop = cli.scrollHeight;
+    }
+
+    // 🎉 End of Challenge
+    function endChallenge() {
+      bgMusic.pause();
+      cli.innerHTML += `<br><span style='color:#00ffae;'>🎉 Congratulations! You’ve mastered Kubernetes Commands!</span><br>`;
+      feedback.textContent = "🏆 Kubernetes Commands quest completed! now level up with puzzle game.";
+      feedback.className = "msg correct";
+
+      const unlocked = JSON.parse(localStorage.getItem("unlockedQuests") || "[]");
+      if (!unlocked.includes("Jenkins Quest")) unlocked.push("Jenkins Quest");
+      localStorage.setItem("unlockedQuests", JSON.stringify(unlocked));
+      localStorage.setItem("nextQuest", "jenkins");
+      localStorage.setItem("xp", parseInt(localStorage.getItem("xp") || 0) + 450);
+
+      for (let i = 0; i < 40; i++) {
+        const c = document.createElement("div");
+        c.classList.add("confetti");
+        c.style.left = Math.random() * window.innerWidth + "px";
+        c.style.background = ["#00f7ff","#00ffc8","#ff7b9b"][Math.floor(Math.random()*3)];
+        c.style.animationDuration = 1.5 + Math.random()*2 + "s";
+        document.body.appendChild(c);
+        setTimeout(() => c.remove(), 2500);
+      }
+
+      setTimeout(() => {
+        alert("🎉 Level Up! Now Let's start with puzzle game. 🚀");
+        window.location.href = "kubernetesPuzzle.html";
+      }, 3500);
+    }
+  </script>
+</body>
+</html>

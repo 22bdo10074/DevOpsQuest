@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>☸️ Kubernetes Puzzle — DevOpsQuest</title>
+  <style>
+    body {
+      font-family: "Orbitron", "Rajdhani", sans-serif;
+      background: radial-gradient(circle at 20% 20%, #010a1a, #000);
+      color: #d6faff;
+      text-align: center;
+      padding: 30px;
+      overflow-x: hidden;
+    }
+    h1 {
+      color: #00f7ff;
+      text-shadow: 0 0 15px #00f7ff;
+    }
+    p { color: #aef; }
+    .panel {
+      background: rgba(0, 25, 45, 0.7);
+      border: 2px solid rgba(0, 255, 255, 0.2);
+      border-radius: 15px;
+      padding: 25px;
+      margin: 25px auto;
+      width: 85%;
+      max-width: 850px;
+      box-shadow: 0 0 25px rgba(0,255,255,0.15);
+    }
+    .diagram img {
+      width: 80%;
+      max-width: 600px;
+      border-radius: 10px;
+      box-shadow: 0 0 25px rgba(0,255,255,0.15);
+    }
+    .drag-item {
+      display: inline-block;
+      background: rgba(0,255,255,0.1);
+      border: 1px solid rgba(0,255,255,0.3);
+      border-radius: 8px;
+      padding: 12px 18px;
+      margin: 10px;
+      cursor: grab;
+      font-weight: bold;
+      color: #00ffc8;
+      transition: 0.2s;
+    }
+    .drag-item.dragging { opacity: 0.5; transform: scale(0.9); }
+    .drop-zone {
+      min-height: 120px;
+      border: 2px dashed rgba(0,255,255,0.3);
+      border-radius: 12px;
+      padding: 15px;
+      background: rgba(0, 20, 40, 0.5);
+      margin-top: 20px;
+    }
+    .feedback {
+      margin-top: 10px;
+      font-weight: 700;
+      font-size: 1.1em;
+    }
+    .correct { color: #00ffc8; text-shadow: 0 0 10px #00ffc8; }
+    .wrong { color: #ff6b88; text-shadow: 0 0 10px #ff6b88; }
+    button {
+      background: linear-gradient(90deg, #00ffc8, #00f7ff);
+      color: #001821;
+      font-weight: bold;
+      border: none;
+      border-radius: 10px;
+      padding: 10px 25px;
+      cursor: pointer;
+      margin-top: 20px;
+      box-shadow: 0 0 20px rgba(0,255,255,0.2);
+      transition: 0.3s;
+    }
+    button:hover { transform: scale(1.05); box-shadow: 0 0 25px #00ffc8; }
+    .confetti {
+      position: fixed; width: 10px; height: 10px; top: 0;
+      animation: fall 2.5s linear forwards;
+    }
+    @keyframes fall {
+      0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+      100% { transform: translateY(600px) rotate(720deg); opacity: 0; }
+    }
+  </style>
+</head>
+
+<body>
+  <h1>☸️ Kubernetes Architecture Puzzle Challenge</h1>
+  <p>Rearrange the Kubernetes components in the correct workflow order 🧩</p>
+
+  <div class="panel">
+    <h2>📘 Kubernetes Architecture Overview</h2>
+    <p>Kubernetes is a container orchestration system composed of several key components:</p>
+    <div class="diagram">
+      
+    </div>
+    <ul style="text-align:left;line-height:1.7em;">
+      <li><b>kubectl:</b> Command-line interface to interact with the cluster API Server.</li>
+      <li><b>API Server:</b> Central management entity that handles all REST requests.</li>
+      <li><b>Controller Manager:</b> Ensures desired state by monitoring controllers.</li>
+      <li><b>Scheduler:</b> Assigns Pods to appropriate Nodes.</li>
+      <li><b>etcd:</b> Key-value store for cluster configuration data.</li>
+      <li><b>Kubelet:</b> Agent running on each node, ensures containers are healthy.</li>
+      <li><b>Kube Proxy:</b> Handles networking and load balancing.</li>
+    </ul>
+
+    <center><button id="startPuzzle">🧩 Start Puzzle</button></center>
+  </div>
+
+  <!-- Puzzle Section -->
+  <div id="puzzleSection" class="panel" style="display:none;">
+    <h2>🧠 Arrange the Components</h2>
+    <p>Drag and drop the following Kubernetes components in the correct architecture order:</p>
+
+    <div id="termsContainer">
+      <div class="drag-item" draggable="true">API Server</div>
+      <div class="drag-item" draggable="true">kubectl</div>
+      <div class="drag-item" draggable="true">Scheduler</div>
+      <div class="drag-item" draggable="true">Controller Manager</div>
+      <div class="drag-item" draggable="true">etcd</div>
+      <div class="drag-item" draggable="true">Kubelet</div>
+      <div class="drag-item" draggable="true">Kube Proxy</div>
+    </div>
+
+    <h3>Drop Here 👇</h3>
+    <div id="dropZone" class="drop-zone"></div>
+
+    <div id="feedback" class="feedback"></div>
+    <button id="checkOrder" style="display:none;">✅ Check Order</button>
+  </div>
+
+  <audio id="bgMusic" src="assets/bgm.mp3" loop></audio>
+  <audio id="sfxSuccess" src="assets/sfx_success.mp3"></audio>
+  <audio id="sfxFail" src="assets/sfx_wrong.mp3"></audio>
+
+  <script>
+    const startPuzzle = document.getElementById("startPuzzle");
+    const puzzleSection = document.getElementById("puzzleSection");
+    const termsContainer = document.getElementById("termsContainer");
+    const dropZone = document.getElementById("dropZone");
+    const checkOrder = document.getElementById("checkOrder");
+    const feedback = document.getElementById("feedback");
+    const bgMusic = document.getElementById("bgMusic");
+    const sfxSuccess = document.getElementById("sfxSuccess");
+    const sfxFail = document.getElementById("sfxFail");
+
+    // Play music
+    bgMusic.volume = 0.3;
+    bgMusic.play().catch(() => {
+      document.body.addEventListener("click", () => bgMusic.play(), { once: true });
+    });
+
+    const correctOrder = [
+      "kubectl",
+      "API Server",
+      "Controller Manager",
+      "Scheduler",
+      "etcd",
+      "Kubelet",
+      "Kube Proxy"
+    ];
+
+    startPuzzle.addEventListener("click", () => {
+      document.querySelector(".panel").style.display = "none";
+      puzzleSection.style.display = "block";
+      checkOrder.style.display = "inline-block";
+    });
+
+    let draggedItem = null;
+
+    document.querySelectorAll(".drag-item").forEach(item => {
+      item.addEventListener("dragstart", () => {
+        draggedItem = item;
+        item.classList.add("dragging");
+      });
+      item.addEventListener("dragend", () => {
+        draggedItem.classList.remove("dragging");
+        draggedItem = null;
+      });
+    });
+
+    dropZone.addEventListener("dragover", e => e.preventDefault());
+    dropZone.addEventListener("drop", e => {
+      e.preventDefault();
+      if (draggedItem) dropZone.appendChild(draggedItem);
+    });
+
+    checkOrder.addEventListener("click", () => {
+      const items = Array.from(dropZone.querySelectorAll(".drag-item")).map(i => i.textContent.trim());
+      if (items.length !== correctOrder.length) {
+        feedback.textContent = "⚠️ Place all components before checking!";
+        feedback.className = "feedback wrong";
+        sfxFail.play();
+        return;
+      }
+      const correct = items.every((v, i) => v === correctOrder[i]);
+      if (correct) {
+        feedback.textContent = "🎉 Correct! Kubernetes Architecture Mastered!";
+        feedback.className = "feedback correct";
+        sfxSuccess.play();
+        setTimeout(showCompletion, 1500);
+      } else {
+        feedback.textContent = "❌ Incorrect order! Try again.";
+        feedback.className = "feedback wrong";
+        sfxFail.play();
+      }
+    });
+
+    function showCompletion() {
+      bgMusic.pause();
+
+      // Confetti effect
+      for (let i = 0; i < 40; i++) {
+        const c = document.createElement("div");
+        c.classList.add("confetti");
+        c.style.left = Math.random() * window.innerWidth + "px";
+        c.style.background = ["#00f7ff","#00ffc8","#ff7b9b"][Math.floor(Math.random()*3)];
+        c.style.animationDuration = 1.5 + Math.random()*2 + "s";
+        document.body.appendChild(c);
+        setTimeout(() => c.remove(), 2500);
+      }
+
+      feedback.innerHTML = "🏆 You’ve successfully completed the Kubernetes Quest! Redirecting to World Map...";
+      feedback.className = "feedback correct";
+
+      const xp = parseInt(localStorage.getItem("xp") || 0) + 500;
+      localStorage.setItem("xp", xp);
+      localStorage.setItem("level", Math.floor(xp / 200));
+      setTimeout(() => {
+        window.location.href = "world.html";
+      }, 4000);
+    }
+  </script>
+</body>
+</html>
