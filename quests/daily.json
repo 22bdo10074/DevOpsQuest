@@ -1,5 +1,0 @@
-[
-  {"title":"Fix Jenkins’ Coffee Machine ☕","desc":"CI builds failing until Jenkins is caffeinated."},
-  {"title":"Docker Monster 🐳","desc":"Containers keep restarting—find root cause!"},
-  {"title":"K8s Chaos ☸️","desc":"Pods rebelling—reconcile deployments!"}
-]
